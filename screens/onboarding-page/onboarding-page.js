@@ -21,7 +21,7 @@ const OnBoarding = ({ navigation }) => {
             <Text style={ styles.welcomeText }>Free up your mind load by managing your tasks at todolist.</Text>
         </View>
 
-        <TouchableOpacity style={ styles.placeholderButton } onPress={navigateToSignup}>
+        <TouchableOpacity activeOpacity = { .5 } style={ styles.placeholderButton } onPress={navigateToSignup}>
             <Text style={ styles.buttonText }>Start</Text>
         </TouchableOpacity>
         

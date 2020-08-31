@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { View, SafeAreaView, FlatList, ActivityIndicator, StyleSheet, Image, Text, TextInput } from "react-native";
+import { View, SafeAreaView, FlatList, ActivityIndicator, TouchableOpacity, StyleSheet, Image, Text, TextInput } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import ProjectItem from "../projects-page/project-item/project-item";
+import AddProject from './add-project/add-project';
+import RBSheet from "react-native-raw-bottom-sheet";
 
 import * as projectsActions from "../../store/actions/projects";
 import {buttonColor, linkColor} from '../../assets/colors';
@@ -28,9 +30,29 @@ const Projects = (props) => {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={ [styles.safeArea] }>
       <View style={styles.addProject}>
-        <Image source={require('./../../assets/plus.png')}/>
+        <TouchableOpacity activeOpacity = { .5 } onPress={() => this.RBSheet.open()}>
+          <Image source={require('./../../assets/plus.png')}/>
+        </TouchableOpacity>
+        <RBSheet
+          ref={ref => {
+            this.RBSheet = ref;
+          }}
+          height={400}
+          openDuration={250}
+          // animationType='fade'
+          customStyles={{
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+              borderTopLeftRadius: 10,
+              borderTopRightRadius: 10
+            }
+          }}
+        >
+          <AddProject />
+        </RBSheet>
       </View>
       <View>
         <Text style={styles.heading}>Projects</Text>

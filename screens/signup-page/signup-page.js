@@ -182,7 +182,7 @@ const Signup = ({ navigation }) => {
             {emptyPasswordField && <Text style={ styles.errorMessage }>{validation.password.empty.message}</Text>}
             {invalidPassField && <Text style={ styles.errorMessage }>{validation.password.incorrect.message}</Text>}
 
-            <TouchableOpacity style={ styles.placeholderButton } onPress={signup}>
+            <TouchableOpacity activeOpacity = { .5 } style={ styles.placeholderButton } onPress={signup}>
                 {
                     !loadingText && (
                         <Text style={ styles.buttonText }>Sign up</Text>

@@ -180,7 +180,7 @@ const Signin = ({ navigation }) => {
 
             <Link style={ styles.linkText } to={'/ForgotPassword'}>Forgot Password</Link>
 
-            <TouchableOpacity style={ styles.placeholderButton } onPress={navigateToSigninRoute}>
+            <TouchableOpacity activeOpacity = { .5 } style={ styles.placeholderButton } onPress={navigateToSigninRoute}>
                 {
                     !loadingText && (
                         <Text style={ styles.buttonText }>Sign in</Text>
@@ -198,7 +198,7 @@ const Signin = ({ navigation }) => {
 
             <Text style={ styles.linkText }>Or Sign in with</Text>
 
-            <TouchableOpacity style={ [styles.placeholderButton, styles.appleButton] } onPress={signup}>
+            <TouchableOpacity activeOpacity = { .5 } style={ [styles.placeholderButton, styles.appleButton] } onPress={signup}>
                 <View style={styles.socialButtonsStyle}>
                     <View style={{borderRightWidth: 0.5, borderColor: 'white'}}>
                         <Image source={require('./../../assets/apple.png')} style={{marginRight: 10}}/>
@@ -210,7 +210,7 @@ const Signin = ({ navigation }) => {
                 </View>
             </TouchableOpacity>
 
-            <TouchableOpacity style={ [styles.placeholderButton, styles.googleButton] } onPress={signup}>
+            <TouchableOpacity activeOpacity = { .5 } style={ [styles.placeholderButton, styles.googleButton] } onPress={signup}>
                 <View style={styles.socialButtonsStyle}>
                     <View style={{borderRightWidth: 0.5, borderColor: 'white'}}>
                         <Image source={require('./../../assets/google.png')} style={{marginRight: 10}}/>

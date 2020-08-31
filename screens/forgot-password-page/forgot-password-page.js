@@ -164,7 +164,7 @@ const ForgotPassword = ({ navigation }) => {
             {invalidEmailField && <Text style={ styles.errorMessage }>{validation.email.incorrect.message}</Text>}
 
 
-            <TouchableOpacity style={ styles.placeholderButton } onPress={signup}>
+            <TouchableOpacity activeOpacity = { .5 } style={ styles.placeholderButton } onPress={signup}>
                 {
                     !loadingText && (
                         <Text style={ styles.buttonText }>Submit</Text>
