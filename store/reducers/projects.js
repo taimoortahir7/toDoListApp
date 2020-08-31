@@ -18,10 +18,9 @@ export default (state = initialState, action) => {
       };
     case CREATE_PROJECT:
       const newProject = new Project(
-        action.projectData.id,
-        action.projectData.title,
-        action.projectData.category,
-        action.projectData.tasks,
+        action.id,
+        action.title,
+        action.category,
       );
       return {
         ...state,

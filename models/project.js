@@ -1,9 +1,8 @@
 class Project {
-    constructor(id, title, category, tasks) {
+    constructor(id, title, category) {
       this.id = id;
       this.category = category;
       this.title = title;
-      this.tasks = tasks;
     }
   }
   

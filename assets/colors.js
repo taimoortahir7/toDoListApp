@@ -6,3 +6,7 @@ export const toolbarTouchHighlightColor = '#4a6178';
 export const subTitleColor = '#dbdbdb';
 export const deleteButton = '#bf0000';
 export const linkColor = '#535cd8';
+export const redColor = '#EA4335';
+export const orangeColor = '#F09536';
+export const blueColor = '#007AFF';
+export const greenColor = '#34A853';

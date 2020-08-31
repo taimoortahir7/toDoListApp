@@ -1,38 +1,78 @@
-import React, {useState} from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { View, ActivityIndicator, TouchableOpacity, StyleSheet, Image, Text, TextInput } from "react-native";
 import { Link } from '@react-navigation/native';
+import { redColor, orangeColor, blueColor, greenColor } from './../../../assets/colors';
 import {Picker} from '@react-native-community/picker';
 import RBSheet from "react-native-raw-bottom-sheet";
 import DecisionView from './../../../shared/decision-view';
+import * as projectsActions from "../../../store/actions/projects";
+import { useSelector, useDispatch } from "react-redux";
 
-const AddProject = () => {
-    const [priority, setPriority] = useState('orange');
+const AddProject = (props) => {
+    const [priority, setPriority] = useState('preferred');
+    const [projectTextInput, setProjectTextInput] = useState('');
+    const refRBSheet = useRef();
+
+    const dispatch = useDispatch();
+
+    const submitHandler = useCallback(() => {
+        dispatch(
+            projectsActions.createProject(projectTextInput, priority)
+        );
+    }, [dispatch, projectTextInput, priority]);
+
+    // useEffect(() => {
+    //     props.navigation.setParams({ submit: submitHandler });
+    // }, [submitHandler]);
 
     return(
         <View style={styles.mainView}>
-            <DecisionView leftLink='Cancel' title='Add Project' rightLink='Done'/>
+            <DecisionView 
+                leftLink='Cancel' 
+                title='Add Project' 
+                rightLink='Done' 
+                cancelFunc={props.cancelFunc} 
+                doneFunc={submitHandler}
+            />
             <View style={styles.addProject}>
                 <TextInput
                     style={ styles.textInput }
-                    onChangeText={text => fieldValueChangeFunc(text, emailTextInput, 'email')}
+                    onChangeText={text => setProjectTextInput(text)}
                     placeholder='Project Name'
                     textContentType='name'
-                    ref={r=>emailTextInput=r}
                 />
                 <View style={styles.colorDiv}>
                     <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                         <Image source={require('./../../../assets/colors.png')}/>
                         <Text style={{ paddingLeft: 10 }}>Color</Text>
                     </View>
-                    <TouchableOpacity style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }} onPress={() => this.RBSheet.open()}>
-                        <View style={{ width: 20, height: 20, backgroundColor: 'red' }}></View>
+                    <TouchableOpacity style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }} onPress={() => refRBSheet.current.open()}>
+                        {
+                            ( priority === 'highest' ) && (
+                                <View style={ [styles.priorityCircle, styles.redBackground] }></View>
+                            )
+                        }
+                        {
+                            ( priority === 'preferred' ) && (
+                                <View style={ [styles.priorityCircle, styles.orangeBackground] }></View>
+                            )
+                        }
+                        {
+                            ( priority === 'moderate' ) && (
+                                <View style={ [styles.priorityCircle, styles.blueBackground] }></View>
+                            )
+                        }
+                        {
+                            ( priority === 'low' ) && (
+                                <View style={ [styles.priorityCircle, styles.greenBackground] }></View>
+                            )
+                        }
                         <Image source={require('./../../../assets/rightArrow.png')}/>
                     </TouchableOpacity>
                 </View>
                 <RBSheet
-                    ref={ref => {
-                        this.RBSheet = ref;
-                    }}
+                    ref={refRBSheet}
+                    closeOnDragDown={true}
                     height={250}
                     openDuration={250}
                     // animationType='fade'
@@ -46,7 +86,7 @@ const AddProject = () => {
                     }}
                     >
                         <View style={{alignItems: 'flex-end', paddingHorizontal: 15, width: '100%' }}>
-                            <Text style={styles.doneLink} onPress={() => this.RBSheet.close()}>Done</Text>
+                            <Text style={styles.doneLink} onPress={() => refRBSheet.current.close()}>Done</Text>
                         </View>
                         <Picker
                             selectedValue={priority}
@@ -54,10 +94,10 @@ const AddProject = () => {
                             onValueChange={(itemValue, itemIndex) =>
                                 setPriority(itemValue)
                             }>
-                                <Picker.Item label="Highest" value="red" />
-                                <Picker.Item label="Prefered" value="orange" />
-                                <Picker.Item label="Moderate" value="blue" />
-                                <Picker.Item label="Low" value="green" />
+                                <Picker.Item label="Highest" value="highest" />
+                                <Picker.Item label="Prefered" value="preferred" />
+                                <Picker.Item label="Moderate" value="moderate" />
+                                <Picker.Item label="Low" value="low" />
                         </Picker>
                 </RBSheet>
             </View>
@@ -75,7 +115,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderRadius: 5,
         width: 417,
-        marginVertical: 10,
+        // marginVertical: 10,
         paddingLeft: 20
     },
     addProject: {
@@ -85,6 +125,9 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
+        borderColor: '#f0f0f0',
+        borderBottomWidth: 1,
+        paddingVertical: 10,
         width: 417,
         paddingHorizontal: 15,
         justifyContent: 'space-between'
@@ -95,6 +138,24 @@ const styles = StyleSheet.create({
         lineHeight: 22,
         color: '#3F72AF'
     },
+    priorityCircle: {
+        width: 24,
+        height: 24,
+        marginRight: 5,
+        borderRadius: 15
+    },
+    redBackground: {
+        backgroundColor: redColor
+    },
+    orangeBackground: {
+        backgroundColor: orangeColor
+    },
+    blueBackground: {
+        backgroundColor: blueColor
+    },
+    greenBackground: {
+        backgroundColor: greenColor
+    }
 });
 
 export default AddProject;

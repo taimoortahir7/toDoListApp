@@ -19,7 +19,6 @@ export const fetchProjects = () => {
           key,
           resData[key].title,
           resData[key].category,
-          resData[key].tasks
         )
       );
     }
@@ -28,7 +27,7 @@ export const fetchProjects = () => {
   };
 };
 
-export const createProject = (title, category, tasks) => {
+export const createProject = (title, category) => {
   return async (dispatch, getState) => {
     const token = getState().auth.token;
     const response = await fetch(
@@ -41,7 +40,6 @@ export const createProject = (title, category, tasks) => {
         body: JSON.stringify({
           title,
           category,
-          tasks,
         }),
       }
     );
@@ -53,7 +51,6 @@ export const createProject = (title, category, tasks) => {
         id: resData.name,
         title,
         category,
-        tasks,
       },
     });
   };

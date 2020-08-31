@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { View, SafeAreaView, FlatList, ActivityIndicator, TouchableOpacity, StyleSheet, Image, Text, TextInput } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import ProjectItem from "../projects-page/project-item/project-item";
@@ -10,6 +10,8 @@ import {buttonColor, linkColor} from '../../assets/colors';
 
 const Projects = (props) => {
   const [isLoading, setIsLoading] = useState(false);
+
+  const refRBSheet = useRef();
 
   const projects = useSelector((state) => state.projects.projects);
   const dispatch = useDispatch();
@@ -29,16 +31,23 @@ const Projects = (props) => {
     );
   }
 
+  const addProject = (obj) => {
+    cancelFunc();
+    console.log('obj: ', obj);
+  };
+  const cancelFunc = () => {
+    refRBSheet.current.close();
+  };
+
   return (
     <SafeAreaView style={ [styles.safeArea] }>
       <View style={styles.addProject}>
-        <TouchableOpacity activeOpacity = { .5 } onPress={() => this.RBSheet.open()}>
+        <TouchableOpacity activeOpacity = { .5 } onPress={() => refRBSheet.current.open()}>
           <Image source={require('./../../assets/plus.png')}/>
         </TouchableOpacity>
         <RBSheet
-          ref={ref => {
-            this.RBSheet = ref;
-          }}
+          ref={refRBSheet}
+          closeOnDragDown={true}
           height={400}
           openDuration={250}
           // animationType='fade'
@@ -51,7 +60,7 @@ const Projects = (props) => {
             }
           }}
         >
-          <AddProject />
+          <AddProject cancelFunc={cancelFunc} doneFunc={addProject}/>
         </RBSheet>
       </View>
       <View>

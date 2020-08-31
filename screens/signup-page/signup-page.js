@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { View, Text, Image, TextInput, Button, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from "react-redux";
+import { View, Text, Image, TextInput, Alert, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import {buttonColor, linkColor} from '../../assets/colors';
 import database from '@react-native-firebase/database';
 import {textInputChangeFunc, checkFieldsValidity} from './../../commons/fieldsValidation';
 import auth from '@react-native-firebase/auth';
 import validation from './../../utils/errorMessages';
+import * as authActions from "../../store/actions/auth";
 import AsyncStorage from '@react-native-community/async-storage';
 
 const Signup = ({ navigation }) => {
@@ -14,6 +16,8 @@ const Signup = ({ navigation }) => {
     const [password, onChangePassword] = useState('');
     const [ConfPassword, onChangeConfPassword] = useState('');
 
+    const [error, setError] = useState();
+
     const [emptyNameField, onChangeEmptyNameField] = useState(false);
     const [emptyEmailField, onChangeEmptyEmailField] = useState(false);
     const [emptyPasswordField, onChangeEmptyPasswordField] = useState(false);
@@ -22,11 +26,43 @@ const Signup = ({ navigation }) => {
     const [invalidPassField, onInvalidPassField] = useState(false);
 
     const [loadingText, setLoadingText] = useState(false);
+
+    const dispatch = useDispatch();
+
+    const authHandler = async () => {
+        let action;
+        action = authActions.signup(
+            name,
+            email,
+            password
+        );
+        setError(null);
+        setLoadingText(true);
+        try {
+            await dispatch(action);
+            setLoadingText(false);
+            navigateToSigninRoute();
+        } catch (err) {
+            console.log('err: ', err);
+            setError(err.message);
+            setLoadingText(false);
+        }
+    };
     
+    useEffect(() => {
+        if (error) {
+          Alert.alert("An Error Occurred!", error, [{ text: "Okay" }]);
+        }
+    }, [error]);
+
     let nameTextInput, emailTextInput, passwordTextInput, CPasswordTextInput;
 
     const navigateToLogin = () => {
         navigation.navigate('Signin');
+    };
+
+    const navigateToSigninRoute = () => {
+        navigation.navigate('Projects');
     };
 
     const storeData = async (identity) => {
@@ -182,7 +218,7 @@ const Signup = ({ navigation }) => {
             {emptyPasswordField && <Text style={ styles.errorMessage }>{validation.password.empty.message}</Text>}
             {invalidPassField && <Text style={ styles.errorMessage }>{validation.password.incorrect.message}</Text>}
 
-            <TouchableOpacity activeOpacity = { .5 } style={ styles.placeholderButton } onPress={signup}>
+            <TouchableOpacity activeOpacity = { .5 } style={ styles.placeholderButton } onPress={authHandler}>
                 {
                     !loadingText && (
                         <Text style={ styles.buttonText }>Sign up</Text>

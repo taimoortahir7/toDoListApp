@@ -6,9 +6,9 @@ const DecisionView = (props) => {
     return(
         <View style={styles.mainView}>
             <View style={styles.decisionView}>
-                <Text style={[ styles.leftLink, styles.textFont ]}>{props.leftLink}</Text>
+                <Text style={[ styles.leftLink, styles.textFont ]} onPress={props.cancelFunc}>{props.leftLink}</Text>
                 <Text style={styles.textFont}>{props?.title}</Text>
-                <Text style={[ styles.rightLink, styles.textFont ]}>{props.rightLink}</Text>
+                <Text style={[ styles.rightLink, styles.textFont ]} onPress={props.doneFunc}>{props.rightLink}</Text>
             </View>
         </View>
     )
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
         borderColor: '#f0f0f0',
         width: 417,
         marginTop: 20,
-        paddingVertical: 20,
+        paddingBottom: 20,
         paddingHorizontal: 15
     },
     textFont: {
