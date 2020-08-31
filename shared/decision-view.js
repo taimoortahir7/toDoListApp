@@ -6,9 +6,9 @@ const DecisionView = (props) => {
     return(
         <View style={styles.mainView}>
             <View style={styles.decisionView}>
-                <Link style={[ styles.leftLink, styles.textFont ]}>{props.leftLink}</Link>
+                <Text style={[ styles.leftLink, styles.textFont ]}>{props.leftLink}</Text>
                 <Text style={styles.textFont}>{props?.title}</Text>
-                <Link style={[ styles.rightLink, styles.textFont ]}>{props.rightLink}</Link>
+                <Text style={[ styles.rightLink, styles.textFont ]}>{props.rightLink}</Text>
             </View>
         </View>
     )
