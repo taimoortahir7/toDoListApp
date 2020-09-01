@@ -61,7 +61,7 @@ const Signin = ({ navigation }) => {
     };
 
     const navigateToSigninRoute = () => {
-        navigation.navigate('Projects');
+        navigation.navigate('bottomNavigation');
     };
 
     const storeData = async (identity) => {

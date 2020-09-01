@@ -8,7 +8,7 @@
 
 import 'react-native-gesture-handler';
 import React, {useEffect} from 'react';
-// import bottomNavigation from './src/components/bottomTabNavigator';
+import bottomNavigation from './screens/bottom-navigation-page/bottom-navigation-page';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SplashScreen from 'react-native-splash-screen';
@@ -24,6 +24,10 @@ import authReducer from './store/reducers/auth';
 import Signin from './screens/signin-page/signin-page';
 import ForgotPassword from './screens/forgot-password-page/forgot-password-page';
 import Projects from './screens/projects-page/projects-page';
+import Settings from './screens/settings/settings';
+import PrivacyPolicy from './screens/privacy-policy-page/privacy-policy-page';
+import SecurityPolicy from './screens/security-policy-page/security-policy-page';
+import TermsService from './screens/terms-service-page/terms-service-page';
 import Tasks from './screens/tasks-page/tasks-page';
 import Signup from './screens/signup-page/signup-page';
 import OnBoarding from './screens/onboarding-page/onboarding-page';
@@ -61,18 +65,32 @@ const App: () => React$Node = () => {
             headerShown: false
           }}
         >
-          {/* <Stack.Screen name='bottomNavigation' component={bottomNavigation}/> */}
+          <Stack.Screen name='bottomNavigation' component={bottomNavigation}/>
           <Stack.Screen name='Signup' component={Signup}/>
           <Stack.Screen name='Signin' component={Signin}/>
           <Stack.Screen name='ForgotPassword' component={ForgotPassword}/>
           <Stack.Screen name='OnBoarding' component={OnBoarding}/>
           <Stack.Screen name='Projects' component={Projects}/>
+          <Stack.Screen name='Settings' component={Settings}/>
+          <Stack.Screen name='PrivacyPolicy' component={PrivacyPolicy}
+          options={() => ({
+            headerTitle: 'Privacy Policy',
+            headerShown: true
+          })}/>
+          <Stack.Screen name='SecurityPolicy' component={SecurityPolicy}
+          options={() => ({
+            headerTitle: 'Security Policy',
+            headerShown: true
+          })}/>
+          <Stack.Screen name='TermsService' component={TermsService}
+          options={() => ({
+            headerTitle: 'Terms of Service',
+            headerShown: true
+          })}/>
           <Stack.Screen name='Tasks' component={Tasks}
           options={({ route }) => ({
             headerShown: true,
             headerRight: (props) => {
-              console.log('route: ', route);
-              console.log('props: ', props);
               return <AddView
                 type='task'
                 projectName={route?.params?.projectName}
