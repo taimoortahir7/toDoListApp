@@ -5,12 +5,11 @@ import ProjectItem from "../projects-page/project-item/project-item";
 import AddView from './../../shared/add-view';
 
 import * as projectsActions from "../../store/actions/projects";
+import * as tasksActions from "../../store/actions/tasks";
 import {buttonColor, linkColor} from '../../assets/colors';
 
 const Projects = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
-
-  const refRBSheet = useRef();
 
   const projects = useSelector((state) => state.projects.availableProjects);
   const dispatch = useDispatch();
@@ -32,18 +31,21 @@ const Projects = ({ navigation }) => {
 
   const addProject = (obj) => {
     setIsLoading(true);
-    cancelFunc();
     dispatch(projectsActions.fetchProjects()).then(() => {
       setIsLoading(false);
     });
   };
-  const cancelFunc = () => {
-    refRBSheet.current.close();
+  
+  const addTask = (projectID) => {
+    setIsLoading(true);
+    dispatch(tasksActions.fetchTasks(projectID)).then(() => {
+      setIsLoading(false);
+    });
   };
 
   return (
     <SafeAreaView style={ [styles.safeArea] }>
-      <AddView type='project' cancelFunc={cancelFunc} doneFunc={addProject}/>
+      <AddView type='project' doneFunc={addProject}/>
       <View>
         <Text style={styles.heading}>Projects</Text>
         <View style={styles.search}>
@@ -63,10 +65,11 @@ const Projects = ({ navigation }) => {
         data={projects}
         keyExtractor={(item) => item.id}
         renderItem={(itemData) => {
-          console.log('itemData!!!!!!!!!!!! ', itemData);
+          console.log('itemData: ', itemData);
           return <TouchableOpacity onPress={() => navigation.navigate('Tasks', {
             projectID: itemData.item.id,
-            projectName: itemData.item.title
+            projectName: itemData.item.title,
+            addTask: addTask(itemData.item.id)
           })}>
             <ProjectItem
               title={itemData.item.title}

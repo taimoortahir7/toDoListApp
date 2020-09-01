@@ -18,19 +18,12 @@ const AddTask = (props) => {
 
     const dispatch = useDispatch();
 
-    console.log('props.projectName in ADD: ', props.projectName);
-    console.log('props.projectID in ADD: ', props.projectID);
-
     const submitHandler = useCallback(() => {
         dispatch(
             tasksActions.createTask(taskTextInput, priority, date, props.projectName, props.projectID)
         );
-        props.doneFunc();
+        // props.doneFunc();
     }, [dispatch, taskTextInput, priority, props.projectName, props.projectID]);
-
-    // useEffect(() => {
-    //     props.navigation.setParams({ submit: submitHandler });
-    // }, [submitHandler]);
 
     return(
         <View style={styles.mainView}>

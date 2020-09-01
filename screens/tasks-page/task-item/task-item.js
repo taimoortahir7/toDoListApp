@@ -9,37 +9,43 @@ const TaskItem = (props) => {
         {
           (props.category === 'highest') && (
             <View style={ [styles.categoryBackground, styles.categoryRed] }>
-              <Image source={require('./../../../assets/projectItem.png')}/>
+              <Image source={require('./../../../assets/flag.png')}/>
             </View>
           )
         }
         {
           (props.category === 'preferred') && (
             <View style={ [styles.categoryBackground, styles.categoryOrange] }>
-              <Image source={require('./../../../assets/projectItem.png')}/>
+              <Image source={require('./../../../assets/flag.png')}/>
             </View>
           )
         }
         {
           (props.category === 'moderate') && (
             <View style={ [styles.categoryBackground, styles.categoryBlue] }>
-              <Image source={require('./../../../assets/projectItem.png')}/>
+              <Image source={require('./../../../assets/flag.png')}/>
             </View>
           )
         }
         {
           (props.category === 'low') && (
             <View style={ [styles.categoryBackground, styles.categoryGreen] }>
-              <Image source={require('./../../../assets/projectItem.png')}/>
+              <Image source={require('./../../../assets/flag.png')}/>
             </View>
           )
         }
       </View>
       <View style={styles.title}>
-      <Text style={{ paddingHorizontal: 10, paddingVertical: 5 }}>{props.title}</Text>
+        <Text style={{ paddingHorizontal: 10, paddingVertical: 5 }}>{props.title}</Text>
         <View style={styles.tasks}>
-          <Image source={require('./../../../assets/taskIcon.png')}/>
-          <Text style={{ paddingHorizontal: 5}}>tasks</Text>
+          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+            <Image source={require('./../../../assets/taskIcon.png')}/>
+            <Text style={{ paddingHorizontal: 5}}>{props.projectName}</Text>
+          </View>
+          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+            <Image source={require('./../../../assets/dateImage.png')}/>
+            <Text style={{ paddingHorizontal: 5 , marginLeft: 5}}>{props.date}</Text>
+          </View>
         </View>
       </View>
     </View>
@@ -88,7 +94,8 @@ const styles = StyleSheet.create({
   tasks: {
     display: 'flex',
     flexDirection: 'row',
-    // paddingVertical: 5,
+    justifyContent: 'space-between',
+    width: 330,
     paddingHorizontal: 8,
     alignItems: 'center'
   }

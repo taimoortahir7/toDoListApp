@@ -19,6 +19,7 @@ export const fetchProjects = () => {
           key,
           resData[key].title,
           resData[key].category,
+          resData[key]?.tasks?.length || 0,
         )
       );
     }

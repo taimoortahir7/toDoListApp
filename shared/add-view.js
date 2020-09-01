@@ -9,6 +9,10 @@ const AddView = (props) => {
 
   console.log('projectID: ', props.projectID);
 
+  const cancelFunc = () => {
+    refRBSheet.current.close();
+  };
+
   return (
     <View style={styles.addProject}>
         <TouchableOpacity activeOpacity = { .5 } onPress={() => refRBSheet.current.open()}>
@@ -31,7 +35,7 @@ const AddView = (props) => {
         >
             {
                 (props.type === 'project') && (
-                    <AddProject cancelFunc={props.cancelFunc} doneFunc={props.addProject}/>
+                    <AddProject cancelFunc={cancelFunc} doneFunc={props.doneFunc}/>
                 )
             }
             {
@@ -39,8 +43,8 @@ const AddView = (props) => {
                   <AddTask
                     projectName={props.projectName}
                     projectID={props.projectID}
-                    cancelFunc={props.cancelFunc}
-                    doneFunc={props.addProject}
+                    cancelFunc={cancelFunc}
+                    doneFunc={props.doneFunc}
                   />
                 )
             }

@@ -16,8 +16,6 @@ const Tasks = ({ route, navigation }) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const refRBSheet = useRef();
-
   const tasks = useSelector((state) => state.tasks.availableTasks);
   const dispatch = useDispatch();
 
@@ -38,13 +36,9 @@ const Tasks = ({ route, navigation }) => {
 
   const addProject = (obj) => {
     setIsLoading(true);
-    cancelFunc();
     dispatch(tasksActions.fetchProjects(projectID)).then(() => {
       setIsLoading(false);
     });
-  };
-  const cancelFunc = () => {
-    refRBSheet.current.close();
   };
 
   return (
@@ -58,7 +52,8 @@ const Tasks = ({ route, navigation }) => {
           return <TaskItem
             title={itemData.item.title}
             category={itemData.item.category}
-            tasks={itemData.item.tasks}
+            projectName={itemData.item.projectName}
+            date={itemData.item.date}
           />
         }}
       />

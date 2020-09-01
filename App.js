@@ -77,8 +77,7 @@ const App: () => React$Node = () => {
                 type='task'
                 projectName={route?.params?.projectName}
                 projectID={route?.params?.projectID}
-                cancelFunc={props.cancelFunc}
-                doneFunc={props.addProject}
+                doneFunc={route?.params?.addTask}
               />
             },
           })}/>

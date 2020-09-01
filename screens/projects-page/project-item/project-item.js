@@ -39,7 +39,7 @@ const ProjectItem = (props) => {
       <Text style={{ paddingHorizontal: 10, paddingVertical: 5 }}>{props.title}</Text>
         <View style={styles.tasks}>
           <Image source={require('./../../../assets/taskIcon.png')}/>
-          <Text style={{ paddingHorizontal: 5}}>tasks</Text>
+          <Text style={{ paddingHorizontal: 5}}>{props.tasks} tasks</Text>
         </View>
       </View>
     </View>
