@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { redColor, orangeColor, blueColor, greenColor } from '../../../assets/colors';
 
-const ProjectItem = (props) => {
+const TaskItem = (props) => {
   return (
     <View style={styles.orderItem}>
       <View style={styles.category}>
@@ -94,4 +94,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ProjectItem;
+export default TaskItem;

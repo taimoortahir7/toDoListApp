@@ -23,7 +23,7 @@ export const fetchProjects = () => {
       );
     }
     console.log("loaded projects: ", loadedProjects);
-    dispatch({ type: SET_PROJECTS, products: loadedProjects });
+    dispatch({ type: SET_PROJECTS, projects: loadedProjects });
   };
 };
 

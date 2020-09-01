@@ -1,19 +1,20 @@
 import React, { useEffect, useState, useRef } from "react";
 import { View, SafeAreaView, FlatList, ActivityIndicator, TouchableOpacity, StyleSheet, Image, Text, TextInput } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import ProjectItem from "../projects-page/project-item/project-item";
-import AddProject from './add-project/add-project';
+import TaskItem from "../screens/tasks-page/task-item/task-item";
+import AddTask from './add-project/add-project';
 import RBSheet from "react-native-raw-bottom-sheet";
 
 import * as projectsActions from "../../store/actions/projects";
 import {buttonColor, linkColor} from '../../assets/colors';
 
-const Projects = ({ navigation }) => {
+const Tasks = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const refRBSheet = useRef();
 
   const projects = useSelector((state) => state.projects.availableProjects);
+  console.log('projects: ', projects);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -63,7 +64,7 @@ const Projects = ({ navigation }) => {
             }
           }}
         >
-          <AddProject cancelFunc={cancelFunc} doneFunc={addProject}/>
+          <AddTask cancelFunc={cancelFunc} doneFunc={addProject}/>
         </RBSheet>
       </View>
       <View>
@@ -86,13 +87,11 @@ const Projects = ({ navigation }) => {
         keyExtractor={(item) => item.id}
         renderItem={(itemData) => {
           console.log('itemData: ', itemData);
-          return <TouchableOpacity onPress={() => navigation.navigate('Tasks')}>
-            <ProjectItem
-              title={itemData.item.title}
-              category={itemData.item.category}
-              tasks={itemData.item.tasks}
-            />
-          </TouchableOpacity>
+          return <TaskItem
+            title={itemData.item.title}
+            category={itemData.item.category}
+            tasks={itemData.item.tasks}
+          />
         }}
       />
     </SafeAreaView>
@@ -143,4 +142,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Projects;
+export default Tasks;

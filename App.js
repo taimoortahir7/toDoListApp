@@ -24,6 +24,7 @@ import authReducer from './store/reducers/auth';
 import Signin from './screens/signin-page/signin-page';
 import ForgotPassword from './screens/forgot-password-page/forgot-password-page';
 import Projects from './screens/projects-page/projects-page';
+import Tasks from './screens/tasks-page/tasks-page';
 import Signup from './screens/signup-page/signup-page';
 import OnBoarding from './screens/onboarding-page/onboarding-page';
 
@@ -65,6 +66,7 @@ const App: () => React$Node = () => {
           <Stack.Screen name='ForgotPassword' component={ForgotPassword}/>
           <Stack.Screen name='OnBoarding' component={OnBoarding}/>
           <Stack.Screen name='Projects' component={Projects}/>
+          <Stack.Screen name='Tasks' component={Tasks}/>
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

@@ -8,7 +8,7 @@ import DecisionView from './../../../shared/decision-view';
 import * as projectsActions from "../../../store/actions/projects";
 import { useSelector, useDispatch } from "react-redux";
 
-const AddProject = (props) => {
+const AddTask = (props) => {
     const [priority, setPriority] = useState('preferred');
     const [projectTextInput, setProjectTextInput] = useState('');
     const refRBSheet = useRef();
@@ -159,4 +159,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default AddProject;
+export default AddTask;
