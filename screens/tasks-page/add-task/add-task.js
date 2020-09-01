@@ -4,23 +4,29 @@ import { Link } from '@react-navigation/native';
 import { redColor, orangeColor, blueColor, greenColor } from './../../../assets/colors';
 import {Picker} from '@react-native-community/picker';
 import RBSheet from "react-native-raw-bottom-sheet";
+import DatePicker from 'react-native-datepicker';
 import DecisionView from './../../../shared/decision-view';
-import * as projectsActions from "../../../store/actions/projects";
+import * as tasksActions from "../../../store/actions/tasks";
 import { useSelector, useDispatch } from "react-redux";
 
 const AddTask = (props) => {
     const [priority, setPriority] = useState('preferred');
-    const [projectTextInput, setProjectTextInput] = useState('');
+    const [taskTextInput, setTaskTextInput] = useState('');
+    const [date, setDate] = useState("2020-09-15");
     const refRBSheet = useRef();
+    const datePickerRef = useRef(null);
 
     const dispatch = useDispatch();
 
+    console.log('props.projectName in ADD: ', props.projectName);
+    console.log('props.projectID in ADD: ', props.projectID);
+
     const submitHandler = useCallback(() => {
         dispatch(
-            projectsActions.createProject(projectTextInput, priority)
+            tasksActions.createTask(taskTextInput, priority, date, props.projectName, props.projectID)
         );
         props.doneFunc();
-    }, [dispatch, projectTextInput, priority]);
+    }, [dispatch, taskTextInput, priority, props.projectName, props.projectID]);
 
     // useEffect(() => {
     //     props.navigation.setParams({ submit: submitHandler });
@@ -30,7 +36,7 @@ const AddTask = (props) => {
         <View style={styles.mainView}>
             <DecisionView 
                 leftLink='Cancel' 
-                title='Add Project' 
+                title='Add Task' 
                 rightLink='Done' 
                 cancelFunc={props.cancelFunc} 
                 doneFunc={submitHandler}
@@ -38,14 +44,14 @@ const AddTask = (props) => {
             <View style={styles.addProject}>
                 <TextInput
                     style={ styles.textInput }
-                    onChangeText={text => setProjectTextInput(text)}
-                    placeholder='Project Name'
+                    onChangeText={text => setTaskTextInput(text)}
+                    placeholder='Task Name'
                     textContentType='name'
                 />
                 <View style={styles.colorDiv}>
                     <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                        <Image source={require('./../../../assets/colors.png')}/>
-                        <Text style={{ paddingLeft: 10 }}>Color</Text>
+                        <Image source={require('./../../../assets/flag.png')}/>
+                        <Text style={{ paddingLeft: 10 }}>Flag</Text>
                     </View>
                     <TouchableOpacity style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }} onPress={() => refRBSheet.current.open()}>
                         {
@@ -101,6 +107,52 @@ const AddTask = (props) => {
                                 <Picker.Item label="Low" value="low" />
                         </Picker>
                 </RBSheet>
+                <View style={styles.dateView}>
+                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                        <Image source={require('./../../../assets/dateCalander.png')}/>
+                        <Text style={{ marginLeft: 10 }}>Date</Text>
+                    </View>
+                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                        <DatePicker
+                        style={{width: 100}}
+                        ref={datePickerRef}
+                        date={date}
+                        mode="date"
+                        placeholder="select date"
+                        format="YYYY-MM-DD"
+                        minDate="2020-09-01"
+                        maxDate="2021-12-01"
+                        confirmBtnText="Confirm"
+                        cancelBtnText="Cancel"
+                        showIcon={false}
+                        customStyles={{
+                            dateIcon: {
+                                position: 'absolute',
+                                left: 0,
+                                top: 4,
+                                marginLeft: 7
+                            },
+                            dateInput: {
+                                borderWidth: 0,
+                                // marginLeft: 280
+                            }
+                            // ... You can check the source to find the other keys.
+                        }}
+                            onDateChange={(date) => setDate(date)}
+                        />
+                        <Image source={require('./../../../assets/rightArrow.png')}/>
+                    </View>
+                </View>
+                <View style={styles.dateView}>
+                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                        <Image source={require('./../../../assets/List.png')}/>
+                        <Text style={{ marginLeft: 10 }}>Project</Text>
+                    </View>
+                    <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                        <Text style={{ marginRight: 10 }}>{props.projectName}</Text>
+                        <Image source={require('./../../../assets/rightArrow.png')}/>
+                    </View>
+                </View>
             </View>
         </View>
     )
@@ -156,6 +208,16 @@ const styles = StyleSheet.create({
     },
     greenBackground: {
         backgroundColor: greenColor
+    },
+    dateView: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        borderColor: '#f0f0f0',
+        borderBottomWidth: 1,
+        paddingVertical: 10,
+        width: 417,
+        paddingHorizontal: 15,
     }
 });
 

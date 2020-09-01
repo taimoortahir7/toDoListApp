@@ -1,20 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { View, FlatList, ActivityIndicator, StyleSheet } from "react-native";
+import React, { useEffect, useState, useRef } from "react";
+import { View, SafeAreaView, FlatList, ActivityIndicator, TouchableOpacity, StyleSheet, Image, Text, TextInput } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import TaskItem from "../tasks-page/task-item/task-item";
 
 import * as tasksActions from "../../store/actions/tasks";
 import {buttonColor, linkColor} from '../../assets/colors';
 
-const Tasks = (props) => {
+const Tasks = ({ route, navigation }) => {
+
+  console.log('route.params: ', route.params);
+  const { projectID } = route.params;
+  const { projectName } = route.params;
+
+  console.log('projectID: ', projectID);
+
   const [isLoading, setIsLoading] = useState(false);
 
-  const tasks = useSelector((state) => state.tasks.tasks);
+  const refRBSheet = useRef();
+
+  const tasks = useSelector((state) => state.tasks.availableTasks);
   const dispatch = useDispatch();
 
   useEffect(() => {
     setIsLoading(true);
-    dispatch(tasksActions.fetchTasks()).then(() => {
+    dispatch(tasksActions.fetchTasks(projectID)).then(() => {
       setIsLoading(false);
     });
   }, [dispatch]);
@@ -27,19 +36,33 @@ const Tasks = (props) => {
     );
   }
 
+  const addProject = (obj) => {
+    setIsLoading(true);
+    cancelFunc();
+    dispatch(tasksActions.fetchProjects(projectID)).then(() => {
+      setIsLoading(false);
+    });
+  };
+  const cancelFunc = () => {
+    refRBSheet.current.close();
+  };
+
   return (
-    <FlatList
-      data={tasks}
-      keyExtractor={(item) => item.id}
-      renderItem={(itemData) => {
-        return <TaskItem
-          amount={itemData.item.totalAmount}
-          date={itemData.item.readableDate}
-          items={itemData.item.items}
-          location={itemData.item.locationAddress}
-        />
-      }}
-    />
+    <SafeAreaView style={ [styles.safeArea] }>
+      <Text style={styles.listProjectsNo}>List of Tasks ({tasks.length})</Text>
+      <FlatList
+        data={tasks}
+        keyExtractor={(item) => item.id}
+        renderItem={(itemData) => {
+          console.log('itemData: ', itemData);
+          return <TaskItem
+            title={itemData.item.title}
+            category={itemData.item.category}
+            tasks={itemData.item.tasks}
+          />
+        }}
+      />
+    </SafeAreaView>
   );
 };
 
@@ -49,6 +72,42 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  safeArea: {
+    flex: 1
+  },
+  addProject: {
+    alignItems: 'flex-end',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+  },
+  heading: {
+    fontWeight: 'bold',
+    fontSize: 34,
+    lineHeight: 41,
+    marginLeft: 16
+  },
+  search: {
+    display: 'flex',
+    flexDirection: 'row',
+    height: 36, 
+    borderColor: 'rgba(118, 118, 128, 0.12);',
+    backgroundColor: 'rgba(118, 118, 128, 0.12);',
+    borderWidth: 1,
+    borderRadius: 10,
+    marginHorizontal: 16,
+    marginVertical: 10,
+    paddingLeft: 10
+  },
+  textInput: { 
+    paddingLeft: 10
+  },
+  listProjectsNo: {
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    fontWeight: '600',
+    fontSize: 17,
+    lineHeight: 22
+  }
 });
 
 export default Tasks;

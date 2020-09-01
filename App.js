@@ -27,6 +27,7 @@ import Projects from './screens/projects-page/projects-page';
 import Tasks from './screens/tasks-page/tasks-page';
 import Signup from './screens/signup-page/signup-page';
 import OnBoarding from './screens/onboarding-page/onboarding-page';
+import AddView from './shared/add-view';
 
 const rootReducer = combineReducers({
   projects: projectsReducer,
@@ -66,7 +67,21 @@ const App: () => React$Node = () => {
           <Stack.Screen name='ForgotPassword' component={ForgotPassword}/>
           <Stack.Screen name='OnBoarding' component={OnBoarding}/>
           <Stack.Screen name='Projects' component={Projects}/>
-          <Stack.Screen name='Tasks' component={Tasks}/>
+          <Stack.Screen name='Tasks' component={Tasks}
+          options={({ route }) => ({
+            headerShown: true,
+            headerRight: (props) => {
+              console.log('route: ', route);
+              console.log('props: ', props);
+              return <AddView
+                type='task'
+                projectName={route?.params?.projectName}
+                projectID={route?.params?.projectID}
+                cancelFunc={props.cancelFunc}
+                doneFunc={props.addProject}
+              />
+            },
+          })}/>
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

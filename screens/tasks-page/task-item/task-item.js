@@ -1,17 +1,46 @@
 import React, { useState } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet } from "react-native";
+import { redColor, orangeColor, blueColor, greenColor } from '../../../assets/colors';
 
 const TaskItem = (props) => {
   return (
     <View style={styles.orderItem}>
-      <View style={styles.summary}>
-        <Text style={styles.totalAmount}>${props.amount.toFixed(2)}</Text>
-        <Text style={styles.date}>{props.date}</Text>
+      <View style={styles.category}>
+        {
+          (props.category === 'highest') && (
+            <View style={ [styles.categoryBackground, styles.categoryRed] }>
+              <Image source={require('./../../../assets/projectItem.png')}/>
+            </View>
+          )
+        }
+        {
+          (props.category === 'preferred') && (
+            <View style={ [styles.categoryBackground, styles.categoryOrange] }>
+              <Image source={require('./../../../assets/projectItem.png')}/>
+            </View>
+          )
+        }
+        {
+          (props.category === 'moderate') && (
+            <View style={ [styles.categoryBackground, styles.categoryBlue] }>
+              <Image source={require('./../../../assets/projectItem.png')}/>
+            </View>
+          )
+        }
+        {
+          (props.category === 'low') && (
+            <View style={ [styles.categoryBackground, styles.categoryGreen] }>
+              <Image source={require('./../../../assets/projectItem.png')}/>
+            </View>
+          )
+        }
       </View>
-      <View style={styles.address}>
-        <Text style={styles.totalAmount}>{props?.location?.country} , {props?.location?.city} , 
-        {props?.location?.address}</Text>
-        <Text style={styles.totalAmount}>{props?.location?.zipcode}</Text>
+      <View style={styles.title}>
+      <Text style={{ paddingHorizontal: 10, paddingVertical: 5 }}>{props.title}</Text>
+        <View style={styles.tasks}>
+          <Image source={require('./../../../assets/taskIcon.png')}/>
+          <Text style={{ paddingHorizontal: 5}}>tasks</Text>
+        </View>
       </View>
     </View>
   );
@@ -19,38 +48,50 @@ const TaskItem = (props) => {
 
 const styles = StyleSheet.create({
   orderItem: {
-    shadowColor: "black",
-    shadowOpacity: 0.26,
-    shadowOffset: { width: 0, height: 2 },
+    display: 'flex',
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderColor: '#E4E4E4',
+    backgroundColor: "white",
+    padding: 20,
+    alignItems: "center",
+  },
+  categoryBackground: {
+    alignItems: "center",
+    justifyContent: 'center',
+    width: 50,
+    height: 50,
+    borderRadius: 4,
+    shadowColor: "rgba(50, 50, 71, 0.08)",
+    shadowOpacity: 5,
+    shadowOffset: { width: 4, height: 14 },
     shadowRadius: 8,
     elevation: 5,
-    borderRadius: 10,
-    backgroundColor: "white",
-    margin: 20,
-    padding: 10,
-    alignItems: "center",
+    // shadow: '0px 4px 4px rgba(50, 50, 71, 0.08), 0px 4px 8px rgba(50, 50, 71, 0.06)'
   },
-  summary: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-    marginBottom: 15,
+  categoryRed: {
+    backgroundColor: redColor
   },
-  address: {
+  categoryOrange: {
+    backgroundColor: orangeColor
+  },
+  categoryBlue: {
+    backgroundColor: blueColor
+  },
+  categoryGreen: {
+    backgroundColor: greenColor
+  },
+  title: {
     display: 'flex',
-    justifyContent: 'flex-start',
-    width: "100%"
+    // alignItems: 'center'
   },
-  totalAmount: {
-    fontFamily: "open-sans-bold",
-    fontSize: 16,
-  },
-  date: {
-    fontSize: 16,
-    fontFamily: "open-sans",
-    color: "#888",
-  },
+  tasks: {
+    display: 'flex',
+    flexDirection: 'row',
+    // paddingVertical: 5,
+    paddingHorizontal: 8,
+    alignItems: 'center'
+  }
 });
 
 export default TaskItem;

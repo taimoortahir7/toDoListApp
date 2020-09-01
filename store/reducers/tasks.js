@@ -21,6 +21,9 @@ import {
           action.taskData.id,
           action.taskData.title,
           action.taskData.category,
+          action.taskData.date,
+          action.taskData.projectName,
+          action.taskData.projectID
         );
         return {
           ...state,
@@ -34,7 +37,9 @@ import {
           action.pid,
           action.taskData.title,
           action.taskData.category,
-          action.taskData.tasks,
+          action.taskData.date,
+          action.taskData.projectName,
+          action.taskData.projectID
         );
         const updatedUserTasks = [...state.userTasks];
         updatedUserTasks[taskIndex] = updatedTask;

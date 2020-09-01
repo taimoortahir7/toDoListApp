@@ -3,35 +3,41 @@ export const UPDATE_TASK = "UPDATE_TASK";
 export const SET_TASKS = "SET_TASKS";
 import Task from "../../models/task";
 
-export const fetchTasks = () => {
+export const fetchTasks = (projectID) => {
   return async (dispatch) => {
     const response = await fetch(
-      "https://perfumesrnproject.firebaseio.com/products.json"
+      `https://todolistrnproject.firebaseio.com/projects/${projectID}/tasks.json`
     );
 
     const resData = await response.json();
     console.log("resData: ", resData);
-    const loadedProducts = [];
+    const loadedTasks = [];
 
     for (const key in resData) {
-      loadedProducts.push(
+      loadedTasks.push(
         new Task(
           key,
           resData[key].title,
           resData[key].category,
+          resData[key].date,
+          resData[key].projectName,
+          resData[key].projectID,
         )
       );
     }
-    console.log("loaded products: ", loadedProducts);
-    dispatch({ type: SET_TASKS, products: loadedProducts });
+    console.log("loaded tasks: ", loadedTasks);
+    dispatch({ type: SET_TASKS, tasks: loadedTasks });
   };
 };
 
-export const createTask = (title, category, subTasks) => {
+export const createTask = (title, category, date, projectName, projectID) => {
+  console.log('projectID: ', projectID);
+  console.log('projectName: ', projectName);
+
   return async (dispatch, getState) => {
     const token = getState().auth.token;
     const response = await fetch(
-      `https://perfumesrnproject.firebaseio.com/products.json?auth=${token}`,
+      `https://todolistrnproject.firebaseio.com/projects/${projectID}/tasks.json?auth=${token}`,
       {
         method: "Post",
         headers: {
@@ -40,6 +46,9 @@ export const createTask = (title, category, subTasks) => {
         body: JSON.stringify({
           title,
           category,
+          date,
+          projectName,
+          projectID
         }),
       }
     );
@@ -47,22 +56,28 @@ export const createTask = (title, category, subTasks) => {
     console.log(resData);
     dispatch({
       type: CREATE_TASK,
-      productData: {
+      taskData: {
         id: resData.name,
         title,
         category,
+        date,
+        projectName,
+        projectID
       },
     });
   };
 };
 
-export const updateTask = (id, title, category) => {
+export const updateTask = (id, title, category, date, projectName, projectID) => {
   return {
     type: UPDATE_TASK,
     pid: id,
     productData: {
       title,
       category,
+      date,
+      projectName,
+      projectID
     },
   };
 };
