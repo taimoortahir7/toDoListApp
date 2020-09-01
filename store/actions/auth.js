@@ -76,3 +76,38 @@ export const login = (email, password) => {
     dispatch({ type: LOGIN, token: resData.idToken, userId: resData.localId });
   };
 };
+
+export const resetPassword = (email) => {
+  return async (dispatch) => {
+    const response = await fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=" + API_KEY,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          requestType: 'PASSWORD_RESET',
+          email: email
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      const errData = await response.json();
+      if (errData?.error?.message === 'INVALID_PASSWORD') {
+        throw new Error("Invalid Password!");
+      } else if (errData?.error?.message === 'EMAIL_NOT_FOUND') {
+        throw new Error("Invalid Email or User doesnot exsist!");
+      } else if (errData?.error?.message === 'USER_DISABLED') {
+        throw new Error("Account has been deactivated!");
+      } else if (errData?.error?.message === 'PASSWORD_LOGIN_DISABLED') {
+        throw new Error("No user found! Signup first");
+      }
+    }
+
+    const resData = await response.json();
+    console.log('resData: ', resData);
+    // dispatch({ type: LOGIN, token: resData.idToken, userId: resData.localId });
+  };
+}

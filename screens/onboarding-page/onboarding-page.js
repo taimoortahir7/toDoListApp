@@ -14,9 +14,8 @@ const OnBoarding = ({ navigation }) => {
 
   return (
     <View style={ styles.mainContainer }>
-        <Image source={logoImage} style={styles.logoImage}/>
-
-        <View>
+        <View style={{ alignItems: 'center' }}>
+            <Image source={logoImage} style={styles.logoImage}/>
             <Text style={ styles.welcomeHeading }>Welcome to Todolist</Text>
             <Text style={ styles.welcomeText }>Free up your mind load by managing your tasks at todolist.</Text>
         </View>
@@ -39,7 +38,8 @@ const styles = StyleSheet.create({
     },
     logoImage: {
         width: 272,
-        height: 182
+        height: 182,
+        marginBottom: 30
     },
     placeholderButton: {
         alignItems: "center",

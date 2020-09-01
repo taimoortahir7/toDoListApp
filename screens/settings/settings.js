@@ -11,8 +11,8 @@ const Settings = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const settingsList = [
-      'General',
-      'Help & Feedback',
+    //   'General',
+    //   'Help & Feedback',
       'Privacy Policy',
       'Terms of Service',
       'Security Policy'

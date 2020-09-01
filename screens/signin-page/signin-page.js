@@ -9,8 +9,22 @@ import validation from './../../utils/errorMessages';
 import AsyncStorage from '@react-native-community/async-storage';
 import * as authActions from "../../store/actions/auth";
 import { Link } from '@react-navigation/native';
+import {
+    GoogleSigninButton,
+    GoogleSignin,
+    statusCodes
+} from '@react-native-community/google-signin';
+import appleAuth, {
+    AppleButton,
+    AppleAuthRequestOperation,
+    AppleAuthRequestScope,
+    AppleAuthCredentialState,
+  } from '@invertase/react-native-apple-authentication';
+import { WEB_CLIENT_ID } from '../../utils/firebaseKey';
 
 const Signin = ({ navigation }) => {
+
+    GoogleSignin.configure();
 
     const [name, onChangeName] = useState('');
     const [email, onChangeEmail] = useState('');
@@ -21,6 +35,7 @@ const Signin = ({ navigation }) => {
 
     const dispatch = useDispatch();
 
+    const [userInfo, setUserInfo] = useState();
     const [emptyNameField, onChangeEmptyNameField] = useState(false);
     const [emptyEmailField, onChangeEmptyEmailField] = useState(false);
     const [emptyPasswordField, onChangeEmptyPasswordField] = useState(false);
@@ -29,6 +44,57 @@ const Signin = ({ navigation }) => {
     const [invalidPassField, onInvalidPassField] = useState(false);
 
     const [loadingText, setLoadingText] = useState(false);
+
+    const isSignedIn = async () => {
+        const isSignedIn = await GoogleSignin.isSignedIn();
+        if (isSignedIn) {
+            navigateToSigninRoute();
+        } else {
+            signIn();
+        }
+    };
+
+    const signIn = async () => {
+        try {
+          await GoogleSignin.hasPlayServices();
+          const userInfo = await GoogleSignin.signIn();
+          setUserInfo(userInfo);
+          console.log('userInfo: ', userInfo);
+          navigateToSigninRoute();
+        } catch (error) {
+          if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+            // user cancelled the login flow
+          } else if (error.code === statusCodes.IN_PROGRESS) {
+            // operation (e.g. sign in) is in progress already
+          } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+            // play services not available or outdated
+          } else {
+            // some other error happened
+          }
+        }
+    };
+
+    const onAppleButtonPress = async () => {
+        if (!appleAuth.isSupported) {
+            Alert.alert("iOS version not supported!", [{ text: "Okay" }]);
+        } else {
+            // performs login request
+            const appleAuthRequestResponse = await appleAuth.performRequest({
+                requestedOperation: AppleAuthRequestOperation.LOGIN,
+                requestedScopes: [AppleAuthRequestScope.EMAIL, AppleAuthRequestScope.FULL_NAME],
+            });
+         
+            // get current authentication state for user
+            // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+            const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+            
+            // use credentialState response to ensure the user is authenticated
+            if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
+                // user is authenticated
+            }
+        }
+      }
+      
 
     const authHandler = async () => {
         let action;
@@ -228,7 +294,7 @@ const Signin = ({ navigation }) => {
 
             <Text style={ styles.linkText }>Or Sign in with</Text>
 
-            <TouchableOpacity activeOpacity = { .5 } style={ [styles.placeholderButton, styles.appleButton] } onPress={signup}>
+            <TouchableOpacity activeOpacity = { .5 } style={ [styles.placeholderButton, styles.appleButton] } onPress={onAppleButtonPress}>
                 <View style={styles.socialButtonsStyle}>
                     <View style={{borderRightWidth: 0.5, borderColor: 'white'}}>
                         <Image source={require('./../../assets/apple.png')} style={{marginRight: 10}}/>
@@ -240,7 +306,7 @@ const Signin = ({ navigation }) => {
                 </View>
             </TouchableOpacity>
 
-            <TouchableOpacity activeOpacity = { .5 } style={ [styles.placeholderButton, styles.googleButton] } onPress={signup}>
+            <TouchableOpacity activeOpacity = { .5 } style={ [styles.placeholderButton, styles.googleButton] } onPress={isSignedIn}>
                 <View style={styles.socialButtonsStyle}>
                     <View style={{borderRightWidth: 0.5, borderColor: 'white'}}>
                         <Image source={require('./../../assets/google.png')} style={{marginRight: 10}}/>

@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, Image, TextInput, Button, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import {buttonColor, linkColor} from '../../assets/colors';
 import database from '@react-native-firebase/database';
+import { useSelector, useDispatch } from "react-redux";
 import {textInputChangeFunc, checkFieldsValidity} from './../../commons/fieldsValidation';
 import auth from '@react-native-firebase/auth';
 import validation from './../../utils/errorMessages';
 import AsyncStorage from '@react-native-community/async-storage';
+import * as authActions from './../../store/actions/auth';
 import { Link } from '@react-navigation/native';
 
 const ForgotPassword = ({ navigation }) => {
@@ -29,6 +31,8 @@ const ForgotPassword = ({ navigation }) => {
     const navigateToSignup = () => {
         navigation.navigate('Signup');
     };
+
+    const dispatch = useDispatch();
 
     const storeData = async (identity) => {
         try {
@@ -89,6 +93,12 @@ const ForgotPassword = ({ navigation }) => {
             console.log('User added!');
         });
     };
+
+    const resetPassword = () => {
+        dispatch(authActions.resetPassword(email)).then(() => {
+            // setIsLoading(false);
+        });
+    }
 
     const signup = () => {
         clearErrors();
@@ -164,7 +174,7 @@ const ForgotPassword = ({ navigation }) => {
             {invalidEmailField && <Text style={ styles.errorMessage }>{validation.email.incorrect.message}</Text>}
 
 
-            <TouchableOpacity activeOpacity = { .5 } style={ styles.placeholderButton } onPress={signup}>
+            <TouchableOpacity activeOpacity = { .5 } style={ styles.placeholderButton } onPress={resetPassword}>
                 {
                     !loadingText && (
                         <Text style={ styles.buttonText }>Submit</Text>
