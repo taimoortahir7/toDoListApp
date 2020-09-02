@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Rectangle 1.png",
+      "filename" : "toDoLogo-1.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "toDoLogo.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "toDoLogo-2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
