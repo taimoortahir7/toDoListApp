@@ -98,7 +98,7 @@ const Signin = ({ navigation }) => {
       
 
     const authHandler = async () => {
-        if (name === '' || email === '' || password === '') {
+        if (email === '' || password === '') {
             Alert.alert("Fill out credentials!", [{ text: "Okay" }]);
             return;
         } else {
