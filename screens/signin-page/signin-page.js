@@ -75,42 +75,48 @@ const Signin = ({ navigation }) => {
     };
 
     const onAppleButtonPress = async () => {
-        if (!appleAuth.isSupported) {
-            Alert.alert("iOS version not supported!", [{ text: "Okay" }]);
-        } else {
-            // performs login request
-            const appleAuthRequestResponse = await appleAuth.performRequest({
-                requestedOperation: AppleAuthRequestOperation.LOGIN,
-                requestedScopes: [AppleAuthRequestScope.EMAIL, AppleAuthRequestScope.FULL_NAME],
-            });
+        Alert.alert("Currently not available!", [{ text: "Okay" }]);
+        // if (!appleAuth.isSupported) {
+        //     Alert.alert("iOS version not supported!", [{ text: "Okay" }]);
+        // } else {
+        //     // performs login request
+        //     const appleAuthRequestResponse = await appleAuth.performRequest({
+        //         requestedOperation: AppleAuthRequestOperation.LOGIN,
+        //         requestedScopes: [AppleAuthRequestScope.EMAIL, AppleAuthRequestScope.FULL_NAME],
+        //     });
          
-            // get current authentication state for user
-            // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
-            const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+        //     // get current authentication state for user
+        //     // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+        //     const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
             
-            // use credentialState response to ensure the user is authenticated
-            if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
-                // user is authenticated
-            }
-        }
+        //     // use credentialState response to ensure the user is authenticated
+        //     if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
+        //         // user is authenticated
+        //     }
+        // }
       }
       
 
     const authHandler = async () => {
-        let action;
+        if (name === '' || email === '' || password === '') {
+            Alert.alert("Fill out credentials!", [{ text: "Okay" }]);
+            return;
+        } else {
+            let action;
         action = authActions.login(
-            email,
-            password
-        );
-        setError(null);
-        setLoadingText(true);
-        try {
-            await dispatch(action);
-            setLoadingText(false);
-            navigateToSigninRoute();
-        } catch (err) {
-            setError(err.message);
-            setLoadingText(false);
+                email,
+                password
+            );
+            setError(null);
+            setLoadingText(true);
+            try {
+                await dispatch(action);
+                setLoadingText(false);
+                navigateToSigninRoute();
+            } catch (err) {
+                setError(err.message);
+                setLoadingText(false);
+            }
         }
     };
 

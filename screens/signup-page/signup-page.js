@@ -30,22 +30,27 @@ const Signup = ({ navigation }) => {
     const dispatch = useDispatch();
 
     const authHandler = async () => {
-        let action;
-        action = authActions.signup(
-            name,
-            email,
-            password
-        );
-        setError(null);
-        setLoadingText(true);
-        try {
-            await dispatch(action);
-            setLoadingText(false);
-            navigateToSigninRoute();
-        } catch (err) {
-            console.log('err: ', err);
-            setError(err.message);
-            setLoadingText(false);
+        if (name === '' || email === '' || password === '') {
+            Alert.alert("Fill out credentials!", [{ text: "Okay" }]);
+            return;
+        } else {
+            let action;
+            action = authActions.signup(
+                name,
+                email,
+                password
+            );
+            setError(null);
+            setLoadingText(true);
+            try {
+                await dispatch(action);
+                setLoadingText(false);
+                navigateToSigninRoute();
+            } catch (err) {
+                console.log('err: ', err);
+                setError(err.message);
+                setLoadingText(false);
+            }
         }
     };
     
