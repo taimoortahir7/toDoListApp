@@ -8,11 +8,8 @@ import {buttonColor, linkColor} from '../../assets/colors';
 
 const Tasks = ({ route, navigation }) => {
 
-  console.log('route.params: ', route.params);
   const { projectID } = route.params;
   const { projectName } = route.params;
-
-  console.log('projectID: ', projectID);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -48,7 +45,6 @@ const Tasks = ({ route, navigation }) => {
         data={tasks}
         keyExtractor={(item) => item.id}
         renderItem={(itemData) => {
-          console.log('itemData: ', itemData);
           return <TaskItem
             title={itemData.item.title}
             category={itemData.item.category}

@@ -14,8 +14,8 @@ const Settings = ({ navigation }) => {
     //   'General',
     //   'Help & Feedback',
       'Privacy Policy',
-      'Terms of Service',
-      'Security Policy'
+      'Terms & Conditions',
+      // 'Security Policy'
   ];
 
   const navigateFunc = () => {
@@ -57,16 +57,16 @@ const Settings = ({ navigation }) => {
         </View>
         {
             (settingsList.map((item, index) => (
-                <TouchableOpacity onPress={() => {
+                <TouchableOpacity key={index} onPress={() => {
                     if (item === 'Privacy Policy') {
                         navigation.navigate('PrivacyPolicy');
-                    } else if (item === 'Terms of Service') {
+                    } else if (item === 'Terms & Conditions') {
                         navigation.navigate('TermsService');
                     } else if (item === 'Security Policy') {
                         navigation.navigate('SecurityPolicy');
                     }
                 }}>
-                    <View key={index} style={styles.listItem}>
+                    <View style={styles.listItem}>
                         <Text style={styles.nameText}>{item}</Text>
                         <Image source={require('./../../assets/rightArrow.png')}/>
                     </View>

@@ -10,17 +10,17 @@ const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
     return (
-        <Tab.Navigator initialRouteName='ToDoList' backBehavior='initialRoute' tabBarOptions={{
+        <Tab.Navigator initialRouteName='Projects' tabBarOptions={{
             activeTintColor: buttonColor,
             showLabel: true
         }}>
-            <Tab.Screen name="Projects" component={Projects} initialParams={ {screenName: 'Projects'} } options={{
+            <Tab.Screen name="Projects" component={Projects} options={{
                 tabBarLabel: 'Projects',
                 tabBarIcon: ({ color, size }) => (
                     <Image source={require('./../../assets/projectTab.png')}/>
                 ),
             }} />
-            <Tab.Screen name="Settings" component={Settings} initialParams={ {screenName: 'Settings'} } options={{
+            <Tab.Screen name="Settings" component={Settings} options={{
                 tabBarLabel: 'Settings',
                 tabBarIcon: ({ color, size }) => (
                     <Image source={require('./../../assets/settings.png')}/>

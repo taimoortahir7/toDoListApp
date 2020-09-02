@@ -11,7 +11,7 @@ import {buttonColor, linkColor} from '../../assets/colors';
 const Projects = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const projects = useSelector((state) => state.projects.availableProjects);
+  let projects = useSelector((state) => state.projects.availableProjects);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -43,6 +43,10 @@ const Projects = ({ navigation }) => {
     });
   };
 
+  const searchFilterFunction = text => {    
+    return projects;
+  };
+
   return (
     <SafeAreaView style={ [styles.safeArea] }>
       <AddView type='project' doneFunc={addProject}/>
@@ -52,10 +56,9 @@ const Projects = ({ navigation }) => {
           <Image source={require('./../../assets/search.png')}/>
           <TextInput
               style={ styles.textInput }
-              onChangeText={text => fieldValueChangeFunc(text, passwordTextInput, 'password')}
+              onChangeText={text => searchFilterFunction(text)}
               placeholder='Search'
               textContentType='name'
-              secureTextEntry={true}
               ref={r=>passwordTextInput=r}
           />
         </View>

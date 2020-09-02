@@ -84,12 +84,13 @@ const App: () => React$Node = () => {
           })}/>
           <Stack.Screen name='TermsService' component={TermsService}
           options={() => ({
-            headerTitle: 'Terms of Service',
+            headerTitle: 'Terms & Conditions',
             headerShown: true
           })}/>
           <Stack.Screen name='Tasks' component={Tasks}
           options={({ route }) => ({
             headerShown: true,
+            headerBackTitle: 'Projects',
             headerRight: (props) => {
               return <AddView
                 type='task'
