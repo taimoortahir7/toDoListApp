@@ -30,6 +30,7 @@ import SecurityPolicy from './screens/security-policy-page/security-policy-page'
 import TermsService from './screens/terms-service-page/terms-service-page';
 import Tasks from './screens/tasks-page/tasks-page';
 import Signup from './screens/signup-page/signup-page';
+import Profile from './screens/profile-page/profile-page';
 import OnBoarding from './screens/onboarding-page/onboarding-page';
 import AddView from './shared/add-view';
 
@@ -72,6 +73,11 @@ const App: () => React$Node = () => {
           <Stack.Screen name='OnBoarding' component={OnBoarding}/>
           <Stack.Screen name='Projects' component={Projects}/>
           <Stack.Screen name='Settings' component={Settings}/>
+          <Stack.Screen name='Profile' component={Profile}
+          options={() => ({
+            headerTitle: 'Account',
+            headerShown: true
+          })}/>
           <Stack.Screen name='PrivacyPolicy' component={PrivacyPolicy}
           options={() => ({
             headerTitle: 'Privacy Policy',

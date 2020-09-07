@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from "react-redux";
 import { View, Text, Image, TextInput, Alert, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import {buttonColor, linkColor} from '../../assets/colors';
-import database from '@react-native-firebase/database';
+// import database from '@react-native-firebase/database';
 import {textInputChangeFunc, checkFieldsValidity} from './../../commons/fieldsValidation';
 import auth from '@react-native-firebase/auth';
 import validation from './../../utils/errorMessages';
 import * as authActions from "../../store/actions/auth";
 import AsyncStorage from '@react-native-community/async-storage';
+import { database } from './../../utils/firebase-config';
+import uuid from 'react-native-uuid';
 
 const Signup = ({ navigation }) => {
 
@@ -44,6 +46,7 @@ const Signup = ({ navigation }) => {
             setLoadingText(true);
             try {
                 await dispatch(action);
+                await addUserToFirebaseDatabase();
                 setLoadingText(false);
                 navigateToSigninRoute();
             } catch (err) {
@@ -53,6 +56,14 @@ const Signup = ({ navigation }) => {
             }
         }
     };
+
+    const addUserToFirebaseDatabase = () => {
+        database.ref('users/' + uuid.v4()).set({
+            username: name,
+            email: email,
+            password : password
+        }).then((res) => console.log('res: : ! ! ', res));
+    }; 
     
     useEffect(() => {
         if (error) {
@@ -67,7 +78,7 @@ const Signup = ({ navigation }) => {
     };
 
     const navigateToSigninRoute = () => {
-        navigation.navigate('Projects');
+        navigation.navigate('bottomNavigation');
     };
 
     const storeData = async (identity) => {

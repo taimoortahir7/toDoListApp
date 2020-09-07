@@ -1,25 +1,42 @@
 import React, { useEffect, useState, useRef } from "react";
 import { View, SafeAreaView, ActivityIndicator, TouchableOpacity, StyleSheet, Image, Text, TextInput } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
 import TaskItem from "../tasks-page/task-item/task-item";
-
-import * as tasksActions from "../../store/actions/tasks";
+import ImagePicker from 'react-native-image-picker';
 import {buttonColor, linkColor} from '../../assets/colors';
 
-const Settings = ({ navigation }) => {
+const options = {
+    title: 'Select Avatar',
+    customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+    storageOptions: {
+      skipBackup: true,
+      path: 'images',
+    },
+};
+
+const Profile = ({ navigation }) => {
 
   const [isLoading, setIsLoading] = useState(false);
+  const [avatarSource, setAvatarSource] = useState('./../../assets/profileImage2.png');
 
-  const settingsList = [
-    //   'General',
-    //   'Help & Feedback',
-      'Privacy Policy',
-      'Terms & Conditions',
-      // 'Security Policy'
-  ];
-
-  const navigateFunc = () => {
-
+  const selectImageFromPicker = () => {
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+     
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        const source = { uri: response.uri };
+     
+        // You can also display the image using data:
+        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+     
+        setAvatarSource(source);
+      }
+    });
   };
 
 //   const tasks = useSelector((state) => state.tasks.availableTasks);
@@ -43,20 +60,21 @@ const Settings = ({ navigation }) => {
   return (
     <SafeAreaView style={ [styles.safeArea] }>
         <View style={styles.headingDiv}>
-            <Text style={styles.heading}>Settings</Text>
+            <Image source={avatarSource} style={styles.avatarImage}/>
+            <TouchableOpacity onPress={selectImageFromPicker}>
+              <Text>Edit</Text>
+            </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-          <View style={styles.personalView}>
-              <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                  <Image source={require('./../../assets/profileImage.png')}/>
-                  <View style={{ marginLeft: 20 }}>
-                      <Text style={styles.nameText}>Luther Wilson</Text>
-                      <Text style={styles.textInput}>something@gmail.com</Text>
-                  </View>
-              </View>
-              <Image source={require('./../../assets/rightArrow.png')}/>
-          </View>
-        </TouchableOpacity>
+        <View style={styles.personalView}>
+            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                {/* <Image source={require('./../../assets/profileImage.png')}/> */}
+                <View style={{ marginLeft: 20 }}>
+                    <Text style={styles.nameText}>Luther Wilson</Text>
+                    <Text style={styles.textInput}>something@gmail.com</Text>
+                </View>
+            </View>
+            {/* <Image source={require('./../../assets/rightArrow.png')}/> */}
+        </View>
         {
             (settingsList.map((item, index) => (
                 <TouchableOpacity key={index} onPress={() => {
@@ -68,10 +86,6 @@ const Settings = ({ navigation }) => {
                         navigation.navigate('SecurityPolicy');
                     }
                 }}>
-                    <View style={styles.listItem}>
-                        <Text style={styles.nameText}>{item}</Text>
-                        <Image source={require('./../../assets/rightArrow.png')}/>
-                    </View>
                 </TouchableOpacity>
             )))
         }
@@ -147,7 +161,11 @@ const styles = StyleSheet.create({
       borderColor: '#E4E4E4',
       backgroundColor: 'white',
       paddingVertical: 20
+  },
+  avatarImage: {
+    width: 200,
+    height: 200
   }
 });
 
-export default Settings;
+export default Profile;

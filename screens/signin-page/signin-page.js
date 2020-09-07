@@ -20,7 +20,6 @@ import appleAuth, {
     AppleAuthRequestScope,
     AppleAuthCredentialState,
   } from '@invertase/react-native-apple-authentication';
-import { WEB_CLIENT_ID } from '../../utils/firebaseKey';
 
 const Signin = ({ navigation }) => {
 
