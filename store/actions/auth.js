@@ -1,3 +1,6 @@
+import { database } from './../../utils/firebase-config';
+import { auth } from './../../utils/firebase-config';
+
 export const SIGNUP = "SIGNUP";
 export const LOGIN = "LOGIN";
 
@@ -35,6 +38,13 @@ export const signup = (name, email, password) => {
       }
     } else {
         const resData = await response.json();
+        if (resData) {
+          database.ref('users/' + resData.localId).set({
+            username: name,
+            email: email,
+            password : password
+          }).then((res) => console.log('res: : ! ! ', res));
+        }
         console.log('resDataaaa!!!: ', resData);
         dispatch({ type: SIGNUP, token: resData.idToken, userId: resData.localId });
     }
@@ -73,6 +83,15 @@ export const login = (email, password) => {
 
     const resData = await response.json();
     console.log('resData: ', resData);
+    var user = auth.onAuthStateChanged(function(user) {
+      if (user) {
+        // User is signed in.
+        console.log('signed in: ', user);
+      } else {
+        console.log('not signed in: ', user);
+        // No user is signed in.
+      }
+    });
     dispatch({ type: LOGIN, token: resData.idToken, userId: resData.localId });
   };
 };

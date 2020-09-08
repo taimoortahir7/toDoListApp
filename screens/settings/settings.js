@@ -2,13 +2,17 @@ import React, { useEffect, useState, useRef } from "react";
 import { View, SafeAreaView, ActivityIndicator, TouchableOpacity, StyleSheet, Image, Text, TextInput } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import TaskItem from "../tasks-page/task-item/task-item";
-
+import { database } from './../../utils/firebase-config';
 import * as tasksActions from "../../store/actions/tasks";
 import {buttonColor, linkColor} from '../../assets/colors';
 
 const Settings = ({ navigation }) => {
 
   const [isLoading, setIsLoading] = useState(false);
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [image, setImage] = useState();
 
   const settingsList = [
     //   'General',
@@ -18,19 +22,26 @@ const Settings = ({ navigation }) => {
       // 'Security Policy'
   ];
 
-  const navigateFunc = () => {
+  const userID = useSelector((state) => state.auth.userId);
 
+  const findUserDetails = () => {
+    database.ref('users/' + userID).on('value', function(snapshot) {
+      let userObj = snapshot.val();
+      if (userObj) {
+        setName(userObj?.username);
+        setEmail(userObj?.email);
+        setPassword(userObj?.password);
+        setImage(userObj?.image);
+      }
+
+    });
   };
 
-//   const tasks = useSelector((state) => state.tasks.availableTasks);
 //   const dispatch = useDispatch();
 
-//   useEffect(() => {
-//     setIsLoading(true);
-//     dispatch(tasksActions.fetchTasks(projectID)).then(() => {
-//       setIsLoading(false);
-//     });
-//   }, [dispatch]);
+  useEffect(() => {
+    findUserDetails();
+  }, []);
 
   if (isLoading) {
     return (
@@ -45,13 +56,17 @@ const Settings = ({ navigation }) => {
         <View style={styles.headingDiv}>
             <Text style={styles.heading}>Settings</Text>
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Profile', {
+          username: name,
+          email: email,
+          password: password
+        })}>
           <View style={styles.personalView}>
               <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                   <Image source={require('./../../assets/profileImage.png')}/>
                   <View style={{ marginLeft: 20 }}>
-                      <Text style={styles.nameText}>Luther Wilson</Text>
-                      <Text style={styles.textInput}>something@gmail.com</Text>
+                      <Text style={styles.nameText}>{name}</Text>
+                      <Text style={styles.textInput}>{email}</Text>
                   </View>
               </View>
               <Image source={require('./../../assets/rightArrow.png')}/>

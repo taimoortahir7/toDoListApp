@@ -76,7 +76,8 @@ const App: () => React$Node = () => {
           <Stack.Screen name='Profile' component={Profile}
           options={() => ({
             headerTitle: 'Account',
-            headerShown: true
+            headerShown: true,
+            headerBackTitle: 'Settings'
           })}/>
           <Stack.Screen name='PrivacyPolicy' component={PrivacyPolicy}
           options={() => ({

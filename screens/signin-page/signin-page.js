@@ -102,7 +102,7 @@ const Signin = ({ navigation }) => {
             return;
         } else {
             let action;
-        action = authActions.login(
+            action = authActions.login(
                 email,
                 password
             );
