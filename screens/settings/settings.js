@@ -5,6 +5,7 @@ import TaskItem from "../tasks-page/task-item/task-item";
 import { database } from './../../utils/firebase-config';
 import * as tasksActions from "../../store/actions/tasks";
 import {buttonColor, linkColor} from '../../assets/colors';
+import UserAvatar from 'react-native-user-avatar';
 
 const Settings = ({ navigation }) => {
 
@@ -63,11 +64,13 @@ const Settings = ({ navigation }) => {
         })}>
           <View style={styles.personalView}>
               <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                  <Image source={require('./../../assets/profileImage.png')}/>
-                  <View style={{ marginLeft: 20 }}>
-                      <Text style={styles.nameText}>{name}</Text>
-                      <Text style={styles.textInput}>{email}</Text>
-                  </View>
+                {
+                  (name) && <UserAvatar size={50} style={{ borderRadius: 70, width: 70, height: 70 }} name={name} bgColor="#3F72AF"/>
+                }
+                <View style={{ marginLeft: 20 }}>
+                    <Text style={styles.nameText}>{name}</Text>
+                    <Text style={styles.textInput}>{email}</Text>
+                </View>
               </View>
               <Image source={require('./../../assets/rightArrow.png')}/>
           </View>

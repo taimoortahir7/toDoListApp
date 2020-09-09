@@ -6,6 +6,7 @@ import {buttonColor, linkColor} from '../../assets/colors';
 import { auth, database } from './../../utils/firebase-config';
 import storage from '@react-native-firebase/storage';
 import { useSelector } from "react-redux";
+import UserAvatar from 'react-native-user-avatar';
 
 const options = {
     title: 'Select Avatar',
@@ -56,7 +57,7 @@ const Profile = ({ route, navigation }) => {
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
 
         setTimeout(() => {
-          uploadImage(source);
+          // uploadImage(source);
         }, 2000);
 
       }
@@ -131,8 +132,9 @@ const Profile = ({ route, navigation }) => {
     <SafeAreaView style={ [styles.safeArea] }>
         <View style={styles.headingDiv}>
             <TouchableOpacity onPress={selectImageFromPicker} style={{ alignItems: 'center' }}>
-              <Image source={avatarSource} style={styles.avatarImage}/>
-              <Text>Edit</Text>
+              {/* <Image source={avatarSource} style={styles.avatarImage}/> */}
+              <UserAvatar size={80} style={{ borderRadius: 70 }} name={username} bgColor="#3F72AF"/>
+              {/* <Text>Edit</Text> */}
             </TouchableOpacity>
         </View>
         <Text style={styles.textInput}>FULL NAME</Text>
