@@ -49,17 +49,21 @@ const Profile = ({ route, navigation }) => {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         const source = { uri: response.uri };
+
+        setAvatarSource(source);
      
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
 
-        uploadImage(source);
+        setTimeout(() => {
+          uploadImage(source);
+        }, 2000);
 
       }
     });
   };
 
-  const uploadImage = (source) => {
+  const uploadImage = async (source) => {
     const { uri } = source;
     const filename = uri.substring(uri.lastIndexOf('/') + 1);
     const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
@@ -67,7 +71,7 @@ const Profile = ({ route, navigation }) => {
     console.log('filename', filename);
 
     const task = storage()
-    .ref(filename)
+    .ref(`/images/${filename}`)
     .putFile(uploadUri);
     // set progress state
     task.on('state_changed', snapshot => {
@@ -83,9 +87,9 @@ const Profile = ({ route, navigation }) => {
         setAvatarSource(downloadURL);
 
         updateDBRef();
+       })
+    })
 
-      });
-    });
   };
 
   const updateDBRef = () => {
@@ -97,8 +101,9 @@ const Profile = ({ route, navigation }) => {
     });
   };
 
-  const deleteAccount = () => {
+  const logOut = () => {
 
+    navigation.navigate('Signin');
     // console.log('auth: ', auth);
     // console.log('auth user: ', auth.currentUser);
 
@@ -113,13 +118,6 @@ const Profile = ({ route, navigation }) => {
 
 //   const tasks = useSelector((state) => state.tasks.availableTasks);
 //   const dispatch = useDispatch();
-
-//   useEffect(() => {
-//     setIsLoading(true);
-//     dispatch(tasksActions.fetchTasks(projectID)).then(() => {
-//       setIsLoading(false);
-//     });
-//   }, [dispatch]);
 
   if (isLoading) {
     return (
@@ -162,15 +160,15 @@ const Profile = ({ route, navigation }) => {
             </View>
         </View>
 
-        <View style={{ backgroundColor: 'white', paddingVertical: 20, paddingHorizontal: 20, marginTop: 50}}>
-            <View style={{ alignItems: 'center' }}>
-                <View style={{ marginLeft: 10 }}>
-                  <TouchableOpacity onPress={deleteAccount}>
-                    <Text style={styles.nameText, {color: '#EA4335'}}>Delete Account</Text>
-                  </TouchableOpacity>
-                </View>
-            </View>
-        </View>
+        <TouchableOpacity onPress={logOut}>
+          <View style={{ backgroundColor: 'white', paddingVertical: 20, paddingHorizontal: 20, marginTop: 50}}>
+              <View style={{ alignItems: 'center' }}>
+                  <View style={{ marginLeft: 10 }}>
+                    <Text style={styles.nameText, {color: '#EA4335'}}>Log out</Text>
+                  </View>
+              </View>
+          </View>
+        </TouchableOpacity>
 
     </SafeAreaView>
   );
