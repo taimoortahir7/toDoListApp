@@ -11,12 +11,13 @@ import {buttonColor, linkColor} from '../../assets/colors';
 const Projects = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
 
+  const userID = useSelector((state) => state.auth.userId);
   let projects = useSelector((state) => state.projects.availableProjects);
   const dispatch = useDispatch();
 
   useEffect(() => {
     setIsLoading(true);
-    dispatch(projectsActions.fetchProjects()).then(() => {
+    dispatch(projectsActions.fetchProjects(userID)).then(() => {
       setIsLoading(false);
     });
   }, [dispatch]);
@@ -31,14 +32,14 @@ const Projects = ({ navigation }) => {
 
   const addProject = (obj) => {
     setIsLoading(true);
-    dispatch(projectsActions.fetchProjects()).then(() => {
+    dispatch(projectsActions.fetchProjects(userID)).then(() => {
       setIsLoading(false);
     });
   };
   
   const addTask = (projectID) => {
     setIsLoading(true);
-    dispatch(tasksActions.fetchTasks(projectID)).then(() => {
+    dispatch(tasksActions.fetchTasks(userID, projectID)).then(() => {
       setIsLoading(false);
     });
   };

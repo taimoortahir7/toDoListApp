@@ -16,11 +16,12 @@ const AddTask = (props) => {
     const refRBSheet = useRef();
     const datePickerRef = useRef(null);
 
+    const userID = useSelector((state) => state.auth.userId);
     const dispatch = useDispatch();
 
     const submitHandler = useCallback(() => {
         dispatch(
-            tasksActions.createTask(taskTextInput, priority, date, props.projectName, props.projectID)
+            tasksActions.createTask(taskTextInput, priority, date, props.projectName, userID, props.projectID)
         );
         // props.doneFunc();
     }, [dispatch, taskTextInput, priority, props.projectName, props.projectID]);

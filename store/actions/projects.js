@@ -3,10 +3,10 @@ export const UPDATE_PROJECT = "UPDATE_PROJECT";
 export const SET_PROJECTS = "SET_PROJECTS";
 import Project from "../../models/project";
 
-export const fetchProjects = () => {
+export const fetchProjects = (userID) => {
   return async (dispatch) => {
     const response = await fetch(
-      "https://todolistrnproject.firebaseio.com/projects.json"
+      `https://todolistrnproject.firebaseio.com/users/${userID}/projects.json`
     );
 
     const resData = await response.json();
@@ -28,11 +28,11 @@ export const fetchProjects = () => {
   };
 };
 
-export const createProject = (title, category) => {
+export const createProject = (title, category, userID) => {
   return async (dispatch, getState) => {
     const token = getState().auth.token;
     const response = await fetch(
-      `https://todolistrnproject.firebaseio.com/projects.json?auth=${token}`,
+      `https://todolistrnproject.firebaseio.com/users/${userID}/projects.json?auth=${token}`,
       {
         method: "Post",
         headers: {

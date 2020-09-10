@@ -13,11 +13,12 @@ const AddProject = (props) => {
     const [projectTextInput, setProjectTextInput] = useState('');
     const refRBSheet = useRef();
 
+    const userID = useSelector((state) => state.auth.userId);
     const dispatch = useDispatch();
 
     const submitHandler = useCallback(() => {
         dispatch(
-            projectsActions.createProject(projectTextInput, priority)
+            projectsActions.createProject(projectTextInput, priority, userID)
         );
         props.doneFunc();
     }, [dispatch, projectTextInput, priority]);

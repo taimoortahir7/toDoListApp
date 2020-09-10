@@ -13,12 +13,13 @@ const Tasks = ({ route, navigation }) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
+  const userID = useSelector((state) => state.auth.userId);
   const tasks = useSelector((state) => state.tasks.availableTasks);
   const dispatch = useDispatch();
 
   useEffect(() => {
     setIsLoading(true);
-    dispatch(tasksActions.fetchTasks(projectID)).then(() => {
+    dispatch(tasksActions.fetchTasks(userID, projectID)).then(() => {
       setIsLoading(false);
     });
   }, [dispatch]);
