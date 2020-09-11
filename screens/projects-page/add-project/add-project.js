@@ -37,21 +37,21 @@ const AddProject = (props) => {
             } else {
                 console.log('data saved successfully!');
                 props.confirmDoneEditProject();
+                updateTaskProjectName();
             }
         })
-        updateTaskProjectName();
     };
 
     const updateTaskProjectName = () => {
         database.ref('users/' + userID + '/projects/' + props?.projectIDVal + '/tasks')
         .once('value')
         .then(function(snapshot) {
-            console.log('tasks: !! ', snapshot.val());
-            setTasks(snapshot.val());
-            // tasks.forEach(item => {
-            //     console.log('ids: ', item.id);
-            //     // database.ref('users/' + userID + '/projects/' + props?.projectIDVal + '/tasks/' + item.id)
-            // });
+            snapshot.forEach(function(childSnapshot) {
+                let updates = {};
+                let ref = database.ref('users/' + userID + '/projects/' + props?.projectIDVal + '/tasks/' + childSnapshot.key);
+                updates['/projectName'] = projectTextInput;
+                ref.update(updates);
+            });
         });
     };
 
@@ -60,7 +60,6 @@ const AddProject = (props) => {
             setProjectTextInput(props?.editValue?.title);
             setPriority(props?.editValue?.category);
             if (props?.editValue?.tasks) {
-                console.log('tasks values : ! : ', props?.editValue?.tasks);
                 setTasks(props?.editValue?.tasks);
             }
         }
