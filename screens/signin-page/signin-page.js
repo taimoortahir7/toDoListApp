@@ -297,7 +297,7 @@ const Signin = ({ navigation }) => {
                 }
             </TouchableOpacity>
 
-            <Text style={ styles.linkText }>Or Sign in with</Text>
+            {/* <Text style={ styles.linkText }>Or Sign in with</Text> */}
 
             {/* <TouchableOpacity activeOpacity = { .5 } style={ [styles.placeholderButton, styles.appleButton] } onPress={onAppleButtonPress}>
                 <View style={styles.socialButtonsStyle}>
@@ -311,7 +311,7 @@ const Signin = ({ navigation }) => {
                 </View>
             </TouchableOpacity> */}
 
-            <TouchableOpacity activeOpacity = { .5 } style={ [styles.placeholderButton, styles.googleButton] } onPress={isSignedIn}>
+            {/* <TouchableOpacity activeOpacity = { .5 } style={ [styles.placeholderButton, styles.googleButton] } onPress={isSignedIn}>
                 <View style={styles.socialButtonsStyle}>
                     <View style={{borderRightWidth: 0.5, borderColor: 'white'}}>
                         <Image source={require('./../../assets/google.png')} style={{marginRight: 10}}/>
@@ -321,7 +321,7 @@ const Signin = ({ navigation }) => {
                         <Image source={require('./../../assets/rightArrow.png')} style={{marginLeft: 10}}/>
                     </View>
                 </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
         </View>
         <Text style={ styles.loginText }>Create account! <Text style={ styles.loginLink } onPress={navigateToSignup}>Sign Up</Text></Text>
