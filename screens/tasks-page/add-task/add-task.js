@@ -8,6 +8,7 @@ import DatePicker from 'react-native-datepicker';
 import DecisionView from './../../../shared/decision-view';
 import * as tasksActions from "../../../store/actions/tasks";
 import { useSelector, useDispatch } from "react-redux";
+import { database } from './../../../utils/firebase-config';
 
 const AddTask = (props) => {
     const [priority, setPriority] = useState('preferred');
@@ -26,21 +27,60 @@ const AddTask = (props) => {
         // props.doneFunc();
     }, [dispatch, taskTextInput, priority, props.projectName, props.projectID]);
 
+    const doneEditTask = () => {
+        database.ref('users/' + userID + '/projects/' + props?.projectIDVal + '/tasks/' + props?.taskIDVal)
+        .set({
+            title: taskTextInput,
+            category: priority,
+            date: date,
+            projectID: props?.projectIDVal,
+            projectName: props?.editValue?.projectName
+        }, function(err) {
+            if (err) {
+                console.log('data not saved!');
+            } else {
+                console.log('data saved successfully!');
+                props.confirmDoneEditTask();
+            }
+        })
+    };
+
+    useEffect(() => {
+        if (props?.editValue) {
+            setTaskTextInput(props?.editValue?.title);
+            setPriority(props?.editValue?.category);
+            setDate(props?.editValue?.date);
+        }
+    }, []);
+
     return(
         <View style={styles.mainView}>
-            <DecisionView 
-                leftLink='Cancel' 
-                title='Add Task' 
-                rightLink='Done' 
-                cancelFunc={props.cancelFunc} 
-                doneFunc={submitHandler}
-            />
+            {
+                (props.type === 'editTask') ? (
+                    <DecisionView 
+                        leftLink='Cancel' 
+                        title='Edit Task' 
+                        rightLink='Done' 
+                        cancelFunc={props.cancelFunc} 
+                        doneFunc={doneEditTask}
+                    />
+                ) : (
+                    <DecisionView 
+                        leftLink='Cancel' 
+                        title='Add Task' 
+                        rightLink='Done' 
+                        cancelFunc={props.cancelFunc} 
+                        doneFunc={submitHandler}
+                    />
+                )
+            }
             <View style={styles.addProject}>
                 <TextInput
                     style={ styles.textInput }
                     onChangeText={text => setTaskTextInput(text)}
                     placeholder='Task Name'
                     textContentType='name'
+                    value={taskTextInput}
                 />
                 <View style={styles.colorDiv}>
                     <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -143,7 +183,16 @@ const AddTask = (props) => {
                         <Text style={{ marginLeft: 10 }}>Project</Text>
                     </View>
                     <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={{ marginRight: 10 }}>{props.projectName}</Text>
+                        {
+                            (props?.type === 'editTask') && (
+                                <Text style={{ marginRight: 10 }}>{props?.editValue?.projectName}</Text>
+                            )
+                        }
+                        {
+                            (props?.type !== 'editTask') && (
+                                <Text style={{ marginRight: 10 }}>{props.projectName}</Text>
+                            )
+                        }
                         <Image source={require('./../../../assets/rightArrow.png')}/>
                     </View>
                 </View>

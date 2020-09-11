@@ -4,6 +4,7 @@ import { Link } from '@react-navigation/native';
 import { redColor, orangeColor, blueColor, greenColor } from './../../../assets/colors';
 import {Picker} from '@react-native-community/picker';
 import RBSheet from "react-native-raw-bottom-sheet";
+import { database } from './../../../utils/firebase-config';
 import DecisionView from './../../../shared/decision-view';
 import * as projectsActions from "../../../store/actions/projects";
 import { useSelector, useDispatch } from "react-redux";
@@ -11,6 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 const AddProject = (props) => {
     const [priority, setPriority] = useState('preferred');
     const [projectTextInput, setProjectTextInput] = useState('');
+    const [tasks, setTasks] = useState([]);
     const refRBSheet = useRef();
 
     const userID = useSelector((state) => state.auth.userId);
@@ -23,25 +25,75 @@ const AddProject = (props) => {
         props.doneFunc();
     }, [dispatch, projectTextInput, priority]);
 
-    // useEffect(() => {
-    //     props.navigation.setParams({ submit: submitHandler });
-    // }, [submitHandler]);
+    const doneEditProject = () => {
+        database.ref('users/' + userID + '/projects/' + props?.projectIDVal)
+        .set({
+            title: projectTextInput,
+            category: priority,
+            tasks: tasks
+        }, function(err) {
+            if (err) {
+                console.log('data not saved!');
+            } else {
+                console.log('data saved successfully!');
+                props.confirmDoneEditProject();
+            }
+        })
+        updateTaskProjectName();
+    };
+
+    const updateTaskProjectName = () => {
+        database.ref('users/' + userID + '/projects/' + props?.projectIDVal + '/tasks')
+        .once('value')
+        .then(function(snapshot) {
+            console.log('tasks: !! ', snapshot.val());
+            setTasks(snapshot.val());
+            tasks.forEach(item => {
+                console.log('ids: ', item.id);
+                // database.ref('users/' + userID + '/projects/' + props?.projectIDVal + '/tasks/' + item.id)
+            });
+        });
+    };
+
+    useEffect(() => {
+        if (props?.editValue) {
+            setProjectTextInput(props?.editValue?.title);
+            setPriority(props?.editValue?.category);
+            if (props?.editValue?.tasks) {
+                console.log('tasks values : ! : ', props?.editValue?.tasks);
+                setTasks(props?.editValue?.tasks);
+            }
+        }
+    }, []);
 
     return(
         <View style={styles.mainView}>
-            <DecisionView 
-                leftLink='Cancel' 
-                title='Add Project' 
-                rightLink='Done' 
-                cancelFunc={props.cancelFunc} 
-                doneFunc={submitHandler}
-            />
+            {
+                (props.type === 'editProject') ? (
+                    <DecisionView 
+                        leftLink='Cancel' 
+                        title='Edit Project' 
+                        rightLink='Done' 
+                        cancelFunc={props.cancelFunc} 
+                        doneFunc={doneEditProject}
+                    />
+                ) : (
+                    <DecisionView 
+                        leftLink='Cancel' 
+                        title='Add Project' 
+                        rightLink='Done' 
+                        cancelFunc={props.cancelFunc} 
+                        doneFunc={submitHandler}
+                    />
+                )
+            }
             <View style={styles.addProject}>
                 <TextInput
                     style={ styles.textInput }
                     onChangeText={text => setProjectTextInput(text)}
                     placeholder='Project Name'
                     textContentType='name'
+                    value={projectTextInput}
                 />
                 <View style={styles.colorDiv}>
                     <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>

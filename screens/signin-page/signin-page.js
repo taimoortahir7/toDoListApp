@@ -299,7 +299,7 @@ const Signin = ({ navigation }) => {
 
             <Text style={ styles.linkText }>Or Sign in with</Text>
 
-            <TouchableOpacity activeOpacity = { .5 } style={ [styles.placeholderButton, styles.appleButton] } onPress={onAppleButtonPress}>
+            {/* <TouchableOpacity activeOpacity = { .5 } style={ [styles.placeholderButton, styles.appleButton] } onPress={onAppleButtonPress}>
                 <View style={styles.socialButtonsStyle}>
                     <View style={{borderRightWidth: 0.5, borderColor: 'white'}}>
                         <Image source={require('./../../assets/apple.png')} style={{marginRight: 10}}/>
@@ -309,7 +309,7 @@ const Signin = ({ navigation }) => {
                         <Image source={require('./../../assets/rightArrow.png')} style={{marginLeft: 10}}/>
                     </View>
                 </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity activeOpacity = { .5 } style={ [styles.placeholderButton, styles.googleButton] } onPress={isSignedIn}>
                 <View style={styles.socialButtonsStyle}>
@@ -378,7 +378,8 @@ const styles = StyleSheet.create({
         width: 325,
         height: 50,
         borderRadius: 5,
-        marginTop: 40
+        marginTop: 20,
+        marginBottom: 20
     },
     appleButton: {
         backgroundColor: 'black',

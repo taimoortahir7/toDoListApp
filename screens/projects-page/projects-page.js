@@ -3,13 +3,23 @@ import { View, SafeAreaView, FlatList, ActivityIndicator, TouchableOpacity, Styl
 import { useSelector, useDispatch } from "react-redux";
 import ProjectItem from "../projects-page/project-item/project-item";
 import AddView from './../../shared/add-view';
-
+import Swipeout from 'react-native-swipeout';
+import { database } from './../../utils/firebase-config';
 import * as projectsActions from "../../store/actions/projects";
 import * as tasksActions from "../../store/actions/tasks";
 import {buttonColor, linkColor} from '../../assets/colors';
+import RBSheet from "react-native-raw-bottom-sheet";
+import AddProject from './../projects-page/add-project/add-project';
 
 const Projects = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [editValue, setEditValue] = useState();
+  const [projectIDVal, setProjectIDVal] = useState();
+  const refRBSheet = useRef();
+
+  const cancelFunc = () => {
+    refRBSheet.current.close();
+  };
 
   const userID = useSelector((state) => state.auth.userId);
   let projects = useSelector((state) => state.projects.availableProjects);
@@ -31,6 +41,32 @@ const Projects = ({ navigation }) => {
   }
 
   const addProject = (obj) => {
+    setIsLoading(true);
+    dispatch(projectsActions.fetchProjects(userID)).then(() => {
+      setIsLoading(false);
+    });
+  };
+
+  const deleteProject = (userID, projectID) => {
+    setIsLoading(true);
+    database.ref('users/' + userID + '/projects/' + projectID).remove().then((res) => console.log('res: ', res));
+    dispatch(projectsActions.fetchProjects(userID)).then(() => {
+      setIsLoading(false);
+    });
+  };
+  
+  const editProject = (userID, projectID) => {
+    database.ref('users/' + userID + '/projects/' + projectID)
+    .once('value')
+    .then(function(snapshot) {
+      console.log('user: !! ', snapshot.val());
+      setProjectIDVal(projectID);
+      setEditValue(snapshot.val());
+      refRBSheet.current.open();
+    });
+  };
+
+  const confirmDoneEditProject = () => {
     setIsLoading(true);
     dispatch(projectsActions.fetchProjects(userID)).then(() => {
       setIsLoading(false);
@@ -70,19 +106,56 @@ const Projects = ({ navigation }) => {
         keyExtractor={(item) => item.id}
         renderItem={(itemData) => {
           console.log('itemData: ', itemData);
-          return <TouchableOpacity onPress={() => navigation.navigate('Tasks', {
-            projectID: itemData.item.id,
-            projectName: itemData.item.title,
-            addTask: addTask(itemData.item.id)
-          })}>
-            <ProjectItem
-              title={itemData.item.title}
-              category={itemData.item.category}
-              tasks={itemData.item.tasks}
-            />
-          </TouchableOpacity>
+          return (
+            <Swipeout right={[
+              {
+                text: 'Edit',
+                backgroundColor: "#3F72AF",
+                onPress: () => {editProject(userID, itemData.item.id)}
+              },
+              {
+                text: 'Delete',
+                backgroundColor: "#ff5447",
+                type: 'delete',
+                onPress: () => {deleteProject(userID, itemData.item.id)}
+              }
+            ]}>
+              <TouchableOpacity onPress={() => navigation.navigate('Tasks', {
+                projectID: itemData.item.id,
+                projectName: itemData.item.title,
+                addTask: addTask(itemData.item.id)
+              })}>
+              <ProjectItem
+                title={itemData.item.title}
+                category={itemData.item.category}
+                tasks={itemData.item.tasks}
+              />
+              </TouchableOpacity>
+            </Swipeout>
+          )
         }}
       />
+      <RBSheet
+          ref={refRBSheet}
+          closeOnDragDown={true}
+          height={400}
+          openDuration={250}
+          // animationType='fade'
+          customStyles={{
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+              borderTopLeftRadius: 10,
+              borderTopRightRadius: 10
+            }
+          }}
+        >
+          {
+            (editValue) && (
+              <AddProject cancelFunc={cancelFunc} type="editProject" projectIDVal={projectIDVal} editValue={editValue} confirmDoneEditProject={confirmDoneEditProject}/>
+            )
+          }
+        </RBSheet>
     </SafeAreaView>
   );
 };

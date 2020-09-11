@@ -2,9 +2,12 @@ import React, { useEffect, useState, useRef } from "react";
 import { View, SafeAreaView, FlatList, ActivityIndicator, TouchableOpacity, StyleSheet, Image, Text, TextInput } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import TaskItem from "../tasks-page/task-item/task-item";
-
+import Swipeout from 'react-native-swipeout';
+import { database } from './../../utils/firebase-config';
 import * as tasksActions from "../../store/actions/tasks";
 import {buttonColor, linkColor} from '../../assets/colors';
+import RBSheet from "react-native-raw-bottom-sheet";
+import AddTask from './../tasks-page/add-task/add-task';
 
 const Tasks = ({ route, navigation }) => {
 
@@ -12,6 +15,13 @@ const Tasks = ({ route, navigation }) => {
   const { projectName } = route.params;
 
   const [isLoading, setIsLoading] = useState(false);
+  const [editValue, setEditValue] = useState();
+  const [projectTaskVal, setProjectTaskVal] = useState();
+  const refRBSheet = useRef();
+
+  const cancelFunc = () => {
+    refRBSheet.current.close();
+  };
 
   const userID = useSelector((state) => state.auth.userId);
   const tasks = useSelector((state) => state.tasks.availableTasks);
@@ -32,9 +42,28 @@ const Tasks = ({ route, navigation }) => {
     );
   }
 
-  const addProject = (obj) => {
+  const deleteTask = (userID, projectID, taskID) => {
     setIsLoading(true);
-    dispatch(tasksActions.fetchProjects(projectID)).then(() => {
+    database.ref('users/' + userID + '/projects/' + projectID + '/tasks/' + taskID).remove().then((res) => console.log('res: ', res));
+    dispatch(tasksActions.fetchTasks(userID, projectID)).then(() => {
+      setIsLoading(false);
+    });
+  };
+  
+  const editTask = (userID, projectID, taskID) => {
+    database.ref('users/' + userID + '/projects/' + projectID + '/tasks/' + taskID)
+    .once('value')
+    .then(function(snapshot) {
+      console.log('user: !! ', snapshot.val());
+      setEditValue(snapshot.val());
+      setProjectTaskVal(taskID);
+      refRBSheet.current.open();
+    });
+  };
+
+  const confirmDoneEditTask = () => {
+    setIsLoading(true);
+    dispatch(tasksActions.fetchTasks(userID, projectID)).then(() => {
       setIsLoading(false);
     });
   };
@@ -46,14 +75,51 @@ const Tasks = ({ route, navigation }) => {
         data={tasks}
         keyExtractor={(item) => item.id}
         renderItem={(itemData) => {
-          return <TaskItem
-            title={itemData.item.title}
-            category={itemData.item.category}
-            projectName={itemData.item.projectName}
-            date={itemData.item.date}
-          />
+          return (
+            <Swipeout right={[
+              {
+                text: 'Edit',
+                backgroundColor: "#3F72AF",
+                onPress: () => {editTask(userID, projectID, itemData.item.id)}
+              },
+              {
+                text: 'Delete',
+                backgroundColor: "#ff5447",
+                type: 'delete',
+                onPress: () => {deleteTask(userID, projectID, itemData.item.id)}
+              }
+            ]}>
+              <TaskItem
+                title={itemData.item.title}
+                category={itemData.item.category}
+                projectName={itemData.item.projectName}
+                date={itemData.item.date}
+              />
+            </Swipeout>
+          )
         }}
       />
+      <RBSheet
+          ref={refRBSheet}
+          closeOnDragDown={true}
+          height={400}
+          openDuration={250}
+          // animationType='fade'
+          customStyles={{
+            container: {
+              justifyContent: "center",
+              alignItems: "center",
+              borderTopLeftRadius: 10,
+              borderTopRightRadius: 10
+            }
+          }}
+        >
+          {
+            (editValue) && (
+              <AddTask cancelFunc={cancelFunc} type="editTask" taskIDVal={projectTaskVal} projectIDVal={projectID} editValue={editValue} confirmDoneEditTask={confirmDoneEditTask}/>
+            )
+          }
+        </RBSheet>
     </SafeAreaView>
   );
 };
