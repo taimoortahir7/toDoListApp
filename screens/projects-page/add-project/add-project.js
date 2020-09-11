@@ -48,10 +48,10 @@ const AddProject = (props) => {
         .then(function(snapshot) {
             console.log('tasks: !! ', snapshot.val());
             setTasks(snapshot.val());
-            tasks.forEach(item => {
-                console.log('ids: ', item.id);
-                // database.ref('users/' + userID + '/projects/' + props?.projectIDVal + '/tasks/' + item.id)
-            });
+            // tasks.forEach(item => {
+            //     console.log('ids: ', item.id);
+            //     // database.ref('users/' + userID + '/projects/' + props?.projectIDVal + '/tasks/' + item.id)
+            // });
         });
     };
 
