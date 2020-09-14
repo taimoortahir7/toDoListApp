@@ -4,8 +4,8 @@ import { auth } from './../../utils/firebase-config';
 export const SIGNUP = "SIGNUP";
 export const LOGIN = "LOGIN";
 
-export const API_KEY = 'AIzaSyAcgv_a5ClfpAvuPoCVyTEWUGQTgfxIUME';
-export const CLIENT_ID = '1026632069497-0ql7nisqutd0f7c1b4kprec03gknf6l8.apps.googleusercontent.com';
+export const API_KEY = 'AIzaSyBHAkanBGLEsh_CedWFUfY95zmc8b9wtXQ';
+// export const CLIENT_ID = '1026632069497-0ql7nisqutd0f7c1b4kprec03gknf6l8.apps.googleusercontent.com';
 
 export const signup = (name, email, password) => {
   return async (dispatch) => {

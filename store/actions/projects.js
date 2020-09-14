@@ -7,7 +7,7 @@ import Project from "../../models/project";
 export const fetchProjects = (userID) => {
   return async (dispatch) => {
     const response = await fetch(
-      `https://todolistrnproject.firebaseio.com/users/${userID}/projects.json`
+      `https://todolistrnproject-288120.firebaseio.com/users/${userID}/projects.json`
     );
 
     const resData = await response.json();
@@ -33,7 +33,7 @@ export const createProject = (title, category, userID) => {
   return async (dispatch, getState) => {
     const token = getState().auth.token;
     const response = await fetch(
-      `https://todolistrnproject.firebaseio.com/users/${userID}/projects.json?auth=${token}`,
+      `https://todolistrnproject-288120.firebaseio.com/users/${userID}/projects.json?auth=${token}`,
       {
         method: "Post",
         headers: {

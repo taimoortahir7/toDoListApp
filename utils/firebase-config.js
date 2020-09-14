@@ -3,14 +3,14 @@ import 'firebase/auth'
 import 'firebase/app'
 
 let config = {
-    apiKey: "AIzaSyAcgv_a5ClfpAvuPoCVyTEWUGQTgfxIUME",
-    authDomain: "todolistrnproject.firebaseapp.com",
-    databaseURL: "https://todolistrnproject.firebaseio.com",
-    projectId: "todolistrnproject",
-    storageBucket: "todolistrnproject.appspot.com",
-    messagingSenderId: "70135314811",
-    appId: "1:70135314811:web:7df887f4de21004121e5de",
-    measurementId: "G-BL52GDDQCE"
+    apiKey: "AIzaSyBHAkanBGLEsh_CedWFUfY95zmc8b9wtXQ",
+    authDomain: "todolistrnproject-288120.firebaseapp.com",
+    databaseURL: "https://todolistrnproject-288120.firebaseio.com",
+    projectId: "todolistrnproject-288120",
+    storageBucket: "todolistrnproject-288120.appspot.com",
+    messagingSenderId: "1026632069497",
+    appId: "1:1026632069497:web:2754a3be203dcd55787fa8",
+    measurementId: "G-WNHD39BW6R"
 };
 let app = firebase.initializeApp(config);
 export const database = app.database();

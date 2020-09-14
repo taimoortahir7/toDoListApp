@@ -6,7 +6,7 @@ import Task from "../../models/task";
 export const fetchTasks = (userID, projectID) => {
   return async (dispatch) => {
     const response = await fetch(
-      `https://todolistrnproject.firebaseio.com/users/${userID}/projects/${projectID}/tasks.json`
+      `https://todolistrnproject-288120.firebaseio.com/users/${userID}/projects/${projectID}/tasks.json`
     );
 
     const resData = await response.json();
@@ -37,7 +37,7 @@ export const createTask = (title, category, date, projectName, userID, projectID
   return async (dispatch, getState) => {
     const token = getState().auth.token;
     const response = await fetch(
-      `https://todolistrnproject.firebaseio.com/users/${userID}/projects/${projectID}/tasks.json?auth=${token}`,
+      `https://todolistrnproject-288120.firebaseio.com/users/${userID}/projects/${projectID}/tasks.json?auth=${token}`,
       {
         method: "Post",
         headers: {

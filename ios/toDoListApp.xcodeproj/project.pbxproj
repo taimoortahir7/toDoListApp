@@ -16,7 +16,7 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* toDoListAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* toDoListAppTests.m */; };
 		58783A550573A8E63E88A259 /* libPods-toDoListApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EF57A02DEB1C2883C114D118 /* libPods-toDoListApp-tvOS.a */; };
-		5D678E2E24FD9F8B0080C878 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5D678E2D24FD9F8B0080C878 /* GoogleService-Info.plist */; };
+		5D22BF03250FDF5500C65651 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5D22BF02250FDF5500C65651 /* GoogleService-Info.plist */; };
 		5DB0CECC24FEFDEB008D1C77 /* libRNGoogleSignin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DB0CECB24FEFDEB008D1C77 /* libRNGoogleSignin.a */; };
 		5DB0CECE24FF06B5008D1C77 /* libRNAppleAuthentication.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DB0CECD24FF06B5008D1C77 /* libRNAppleAuthentication.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -58,7 +58,7 @@
 		24EBBBD98557785399F0B86C /* Pods-toDoListApp-toDoListAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-toDoListApp-toDoListAppTests.release.xcconfig"; path = "Target Support Files/Pods-toDoListApp-toDoListAppTests/Pods-toDoListApp-toDoListAppTests.release.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* toDoListApp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "toDoListApp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* toDoListApp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "toDoListApp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5D678E2D24FD9F8B0080C878 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5D22BF02250FDF5500C65651 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5DB0CECB24FEFDEB008D1C77 /* libRNGoogleSignin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNGoogleSignin.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DB0CECD24FF06B5008D1C77 /* libRNAppleAuthentication.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNAppleAuthentication.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FB72141C6C20486CC0E7BF3 /* Pods-toDoListApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-toDoListApp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-toDoListApp-tvOS/Pods-toDoListApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
@@ -184,7 +184,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				5D678E2D24FD9F8B0080C878 /* GoogleService-Info.plist */,
+				5D22BF02250FDF5500C65651 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* toDoListApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* toDoListAppTests */,
@@ -353,8 +353,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
-				5D678E2E24FD9F8B0080C878 /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				5D22BF03250FDF5500C65651 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -692,7 +692,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.timothy.todolistapp;
 				PRODUCT_NAME = "ToDo App";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -715,7 +715,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.timothy.todolistapp;
 				PRODUCT_NAME = "ToDo App";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
