@@ -23,6 +23,7 @@ export const signup = (name, email, password) => {
             returnSecureToken: true,
         }),
       }
+      
     );
 
     if (!response.ok) {
