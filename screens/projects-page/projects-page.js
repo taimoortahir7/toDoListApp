@@ -81,7 +81,7 @@ const Projects = ({ navigation }) => {
   };
 
   const searchFilterFunction = text => {    
-    return projects;
+    return projects = projects.filter(item => item.toLowerCase().match(text));
   };
 
   return (
@@ -89,7 +89,7 @@ const Projects = ({ navigation }) => {
       <AddView type='project' doneFunc={addProject}/>
       <View>
         <Text style={styles.heading}>Projects</Text>
-        <View style={styles.search}>
+        {/* <View style={styles.search}>
           <Image source={require('./../../assets/search.png')}/>
           <TextInput
               style={ styles.textInput }
@@ -98,7 +98,7 @@ const Projects = ({ navigation }) => {
               textContentType='name'
               ref={r=>passwordTextInput=r}
           />
-        </View>
+        </View> */}
       </View>
       <Text style={styles.listProjectsNo}>List of Projects ({projects.length})</Text>
       <FlatList

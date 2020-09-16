@@ -115,14 +115,8 @@ export const resetPassword = (email) => {
 
     if (!response.ok) {
       const errData = await response.json();
-      if (errData?.error?.message === 'INVALID_PASSWORD') {
-        throw new Error("Invalid Password!");
-      } else if (errData?.error?.message === 'EMAIL_NOT_FOUND') {
+      if (errData?.error?.message === 'EMAIL_NOT_FOUND') {
         throw new Error("Invalid Email or User doesnot exsist!");
-      } else if (errData?.error?.message === 'USER_DISABLED') {
-        throw new Error("Account has been deactivated!");
-      } else if (errData?.error?.message === 'PASSWORD_LOGIN_DISABLED') {
-        throw new Error("No user found! Signup first");
       }
     }
 
