@@ -19,10 +19,12 @@ const AddProject = (props) => {
     const dispatch = useDispatch();
 
     const submitHandler = useCallback(() => {
-        dispatch(
-            projectsActions.createProject(projectTextInput, priority, userID)
-        );
-        props.doneFunc();
+        if (projectTextInput !== '') {
+            dispatch(
+                projectsActions.createProject(projectTextInput, priority, userID)
+            );
+            props.doneFunc();
+        }
     }, [dispatch, projectTextInput, priority]);
 
     const doneEditProject = () => {

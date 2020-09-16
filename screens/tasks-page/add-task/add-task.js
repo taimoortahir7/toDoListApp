@@ -21,10 +21,12 @@ const AddTask = (props) => {
     const dispatch = useDispatch();
 
     const submitHandler = useCallback(() => {
-        dispatch(
-            tasksActions.createTask(taskTextInput, priority, date, props.projectName, userID, props.projectID)
-        );
-        // props.doneFunc();
+        if (taskTextInput !== '') {
+            dispatch(
+                tasksActions.createTask(taskTextInput, priority, date, props.projectName, userID, props.projectID)
+            );
+            // props.doneFunc();
+        }
     }, [dispatch, taskTextInput, priority, props.projectName, props.projectID]);
 
     const doneEditTask = () => {
