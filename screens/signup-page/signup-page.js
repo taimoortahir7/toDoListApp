@@ -4,28 +4,24 @@ import { View, Text, Image, TextInput, Alert, StyleSheet, TouchableOpacity, Acti
 import {buttonColor, linkColor} from '../../assets/colors';
 // import database from '@react-native-firebase/database';
 import {textInputChangeFunc, checkFieldsValidity} from './../../commons/fieldsValidation';
-import auth from '@react-native-firebase/auth';
+// import auth from '@react-native-firebase/auth';
 import validation from './../../utils/errorMessages';
 import * as authActions from "../../store/actions/auth";
-import AsyncStorage from '@react-native-community/async-storage';
-import { database } from './../../utils/firebase-config';
-import uuid from 'react-native-uuid';
+// import { database } from './../../utils/firebase-config';
 
 const Signup = ({ navigation }) => {
 
     const [name, onChangeName] = useState('');
     const [email, onChangeEmail] = useState('');
     const [password, onChangePassword] = useState('');
-    const [ConfPassword, onChangeConfPassword] = useState('');
+    // const [ConfPassword, onChangeConfPassword] = useState('');
 
     const [error, setError] = useState();
 
     const [emptyNameField, onChangeEmptyNameField] = useState(false);
     const [emptyEmailField, onChangeEmptyEmailField] = useState(false);
     const [emptyPasswordField, onChangeEmptyPasswordField] = useState(false);
-    const [alreadyInUseField, onAlreadyInUseField] = useState(false);
     const [invalidEmailField, onInvalidEmailField] = useState(false);
-    const [invalidPassField, onInvalidPassField] = useState(false);
 
     const [loadingText, setLoadingText] = useState(false);
 
@@ -36,22 +32,25 @@ const Signup = ({ navigation }) => {
             Alert.alert("Fill out credentials!", [{ text: "Okay" }]);
             return;
         } else {
-            let action;
-            action = authActions.signup(
-                name,
-                email,
-                password
-            );
-            setError(null);
-            setLoadingText(true);
-            try {
-                await dispatch(action);
-                setLoadingText(false);
-                navigateToSigninRoute();
-            } catch (err) {
-                console.log('err: ', err);
-                setError(err.message);
-                setLoadingText(false);
+            if (!invalidEmailField) {
+                clearErrors();
+                let action;
+                action = authActions.signup(
+                    name,
+                    email,
+                    password
+                );
+                setError(null);
+                setLoadingText(true);
+                try {
+                    await dispatch(action);
+                    setLoadingText(false);
+                    navigateToSigninRoute();
+                } catch (err) {
+                    console.log('err: ', err);
+                    setError(err.message);
+                    setLoadingText(false);
+                }   
             }
         }
     };
@@ -72,21 +71,16 @@ const Signup = ({ navigation }) => {
         navigation.navigate('bottomNavigation');
     };
 
-    const storeData = async (identity) => {
-        try {
-          await AsyncStorage.setItem('@name', identity.user._user.displayName);
-          await AsyncStorage.setItem('@email', identity.user._user.email);
-        } catch (e) {
-          // saving error
-        }
-    };
-
     const clearErrors = () => {
-        onAlreadyInUseField(false);
         onInvalidEmailField(false);
-        onInvalidPassField(false);
     };
 
+    const validateEmail = (email) => {
+        const expression = /(?!.*\.{2})^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([\t]*\r\n)?[\t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([\t]*\r\n)?[\t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+    
+        return expression.test(String(email).toLowerCase())
+    };
+    
     const fieldValueChangeFunc = (text, titleTextInput, type) => {
         if(type === 'name') {
             onChangeEmptyNameField(textInputChangeFunc(text, titleTextInput));
@@ -94,97 +88,15 @@ const Signup = ({ navigation }) => {
         } else if(type === 'email') {
             clearErrors();
             onChangeEmptyEmailField(textInputChangeFunc(text, titleTextInput));
+            if (validateEmail(text)) {
+                onInvalidEmailField(false);
+            } else {
+                onInvalidEmailField(true);
+            }
             onChangeEmail(text);
         } else if(type === 'password') {
-            clearErrors();
             onChangeEmptyPasswordField(textInputChangeFunc(text, titleTextInput));
             onChangePassword(text);
-        } else if(type === 'conf_password') {
-            onChangeConfPassword(text);
-            // if(password === ConfPassword) {
-            //     titleTextInput.setNativeProps({
-            //         borderColor: buttonColor,
-            //         borderBottomWidth: 1
-            //     });
-            // } else {
-            //     titleTextInput.setNativeProps({
-            //         borderColor: 'red',
-            //         borderBottomWidth: 1
-            //     });
-            // }
-        }
-    };
-
-    const saveUserName = (identity) => {
-        identity.user._user.displayName = name;
-    };
-
-    const addUserDB = () => {
-        const newReference = database().ref('Users').push();
-
-        newReference.set({
-            name: name,
-            email: email,
-            password: password
-        })
-        .then(() => {
-            console.log('User added!');
-        });
-    };
-
-    const signup = () => {
-        clearErrors();
-        setLoadingText(true);
-        const fields = [
-            {
-                value: name,
-                reference: nameTextInput
-            },
-            {
-                value: email,
-                reference: emailTextInput
-            },
-            {
-                value: password,
-                reference: passwordTextInput
-            },
-            {
-                value: ConfPassword,
-                reference: CPasswordTextInput
-            }
-        ];
-        if(checkFieldsValidity(fields)) {
-            auth()
-            .createUserWithEmailAndPassword(email, password)
-            .then((identity) => {
-                console.log('User account created & signed in!');
-                saveUserName(identity);
-                storeData(identity);
-                addUserDB();
-                navigation.navigate('bottomNavigation');
-                setLoadingText(false);
-            })
-            .catch(error => {
-                if (error.code === 'auth/email-already-in-use') {
-                    console.log('That email address is already in use!');
-                    onAlreadyInUseField(true);
-                }
-
-                if (error.code === 'auth/invalid-email') {
-                    console.log('That email address is invalid!');
-                    onInvalidEmailField(true);
-                }
-
-                if (error.code === 'auth/weak-password') {
-                    console.log('Password should be at least 6 characters!');
-                    onInvalidPassField(true);
-                }
-
-                setLoadingText(false);
-                console.error(error);
-            });
-        } else {
-            setLoadingText(false);
         }
     };
 
@@ -211,7 +123,6 @@ const Signup = ({ navigation }) => {
                 ref={r=>emailTextInput=r}
             />
             {emptyEmailField && <Text style={ styles.errorMessage }>{validation.email.empty.message}</Text>}
-            {alreadyInUseField && <Text style={ styles.errorMessage }>{validation.email.alreadyInUse.message}</Text>}
             {invalidEmailField && <Text style={ styles.errorMessage }>{validation.email.incorrect.message}</Text>}
 
             <TextInput
@@ -223,7 +134,6 @@ const Signup = ({ navigation }) => {
                 ref={r=>passwordTextInput=r}
             />
             {emptyPasswordField && <Text style={ styles.errorMessage }>{validation.password.empty.message}</Text>}
-            {invalidPassField && <Text style={ styles.errorMessage }>{validation.password.incorrect.message}</Text>}
 
             <TouchableOpacity activeOpacity = { .5 } style={ styles.placeholderButton } onPress={authHandler}>
                 {
